@@ -17,7 +17,7 @@
         "aws_environment_variables": {
             "FLASK_ENV": "development",
             "APP_NAME": "",
-            "DEV_DATABASE_URL" : "",
+            "DEV_DATABASE_URL" : "mysql+pymysql://admin:password@oauth-db.cswiy5vmwmww.us-west-2.rds.amazonaws.com/oauth2",
             "DATABASE_URL" : "",
             "FLASKS3_BUCKET_NAME": "",
             "FLASKS3_URL_STYLE": "path",
@@ -32,7 +32,7 @@
     },
     "development": {
         "extends": "base",
-        "keep_warm": false,
+        "keep_warm": false
     },
     "production": {
         "extends": "base",

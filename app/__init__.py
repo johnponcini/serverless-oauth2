@@ -1,10 +1,11 @@
 from flask import Flask
-from sqlalchemy import MetaData
+from sqlalchemy import MetaData, create_engine
 from flask_sqlalchemy import SQLAlchemy
 
 from config import config
 
 db = SQLAlchemy(metadata=MetaData())
+
 
 def create_app(config_name='development'):
     if config_name == 'development': print("App is in DEV MODE!")
