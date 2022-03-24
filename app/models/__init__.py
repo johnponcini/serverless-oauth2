@@ -12,6 +12,6 @@ def get_or_create(model, **kwargs):
         db.session.commit()
     return instance
 
-from .oauth2 import *
 from .user import *
 from .model import *
+from .oauth2 import *
