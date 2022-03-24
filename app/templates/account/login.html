@@ -23,6 +23,9 @@
             <div class="column is-expanded has-text-right">
               <a href="{{ url_for('account.reset_password_request') }}">Forgot password?</a>
             </div>
+            <div class="column is-expanded has-text-right">
+              <a href="{{ url_for('account.register') }}">Register a new account</a>
+            </div>
           </div>
           {{ f.form_message(flashes['danger'], header='Something went wrong.', class='danger') }}
           {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
