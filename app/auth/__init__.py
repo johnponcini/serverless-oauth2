@@ -14,16 +14,17 @@ from app import db
 from app.models.user import User
 from app.models.oauth2 import OAuth2Client, OAuth2AuthorizationCode, OAuth2Token
 
+
 class AuthorizationCodeGrant(grants.AuthorizationCodeGrant):
     TOKEN_ENDPOINT_AUTH_METHODS = [
-        'client_secret_basic',
-        'client_secret_post',
-        'none',
+        "client_secret_basic",
+        "client_secret_post",
+        "none",
     ]
 
     def save_authorization_code(self, code, request):
-        code_challenge = request.data.get('code_challenge')
-        code_challenge_method = request.data.get('code_challenge_method')
+        code_challenge = request.data.get("code_challenge")
+        code_challenge_method = request.data.get("code_challenge_method")
         auth_code = OAuth2AuthorizationCode(
             code=code,
             client_id=request.client.client_id,
@@ -39,7 +40,8 @@ class AuthorizationCodeGrant(grants.AuthorizationCodeGrant):
 
     def query_authorization_code(self, code, client):
         auth_code = OAuth2AuthorizationCode.query.filter_by(
-            code=code, client_id=client.client_id).first()
+            code=code, client_id=client.client_id
+        ).first()
         if auth_code and not auth_code.is_expired():
             return auth_code
 
@@ -99,5 +101,6 @@ def config_oauth(app):
     # protect resource
     bearer_cls = create_bearer_token_validator(db.session, OAuth2Token)
     require_oauth.register_token_validator(bearer_cls())
+
 
 from app.auth.views import oauth

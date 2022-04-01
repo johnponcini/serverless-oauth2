@@ -1,41 +1,35 @@
 {
-    "base": {
-        "app_function": "run.app",
-        "aws_region": "us-west-2",
-        "profile_name": "default",
-        "project_name": "oauth2-server",
-        "runtime": "python3.9",
-        "s3_bucket": "maps-development-oauth2-server",
-        "memory_size": 512,
-        "exclude": [
-            ".git",
-            "venv",
-            "config.env",
-            "app/static",
-            "upload_assets.py"
-        ],
-        "aws_environment_variables": {
-            "FLASK_ENV": "development",
-            "APP_NAME": "",
-            "DEV_DATABASE_URL" : "mysql+pymysql://admin:password@oauth-db.cswiy5vmwmww.us-west-2.rds.amazonaws.com/oauth2",
-            "DATABASE_URL" : "",
-            "FLASKS3_BUCKET_NAME": "",
-            "FLASKS3_URL_STYLE": "path",
-            "FLASKS3_BUCKET_DOMAIN": "",
-            "EMAIL_SENDER": "",
-            "MAIL_SERVER": "smtp.mailgun.org",
-            "MAIL_PORT": "587",
-            "MAIL_USERNAME" : "",
-            "MAIL_PASSWORD" : "",
-            "MAIL_USE_TLS": "True"
-        }
-    },
-    "development": {
-        "extends": "base",
-        "keep_warm": false
-    },
-    "production": {
-        "extends": "base",
-        "keep_warm_expression": "rate(15 minutes)"
+  "base": {
+    "app_function": "run.app",
+    "aws_region": "us-west-2",
+    "profile_name": "default",
+    "project_name": "oauth2-server",
+    "runtime": "python3.9",
+    "s3_bucket": "maps-development-oauth2-server",
+    "memory_size": 512,
+    "exclude": [".git", "venv", "config.env", "app/static", "upload_assets.py"],
+    "aws_environment_variables": {
+      "FLASK_ENV": "development",
+      "APP_NAME": "",
+      "DEV_DATABASE_URL": "mysql+pymysql://admin:password@oauth-db.cswiy5vmwmww.us-west-2.rds.amazonaws.com/oauth2",
+      "DATABASE_URL": "",
+      "FLASKS3_BUCKET_NAME": "",
+      "FLASKS3_URL_STYLE": "path",
+      "FLASKS3_BUCKET_DOMAIN": "",
+      "EMAIL_SENDER": "",
+      "MAIL_SERVER": "smtp.mailgun.org",
+      "MAIL_PORT": "587",
+      "MAIL_USERNAME": "",
+      "MAIL_PASSWORD": "",
+      "MAIL_USE_TLS": "True"
     }
+  },
+  "development": {
+    "extends": "base",
+    "keep_warm": false
+  },
+  "production": {
+    "extends": "base",
+    "keep_warm_expression": "rate(15 minutes)"
+  }
 }
