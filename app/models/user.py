@@ -1,10 +1,10 @@
 from flask import current_app
 from flask_login import UserMixin
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from itsdangerous import BadSignature, SignatureExpired
 from werkzeug.security import check_password_hash, generate_password_hash
+from authlib.jose.errors import BadSignatureError
 
 from app import db
+from app.auth.signature import get_jws_token, verify_jws_token
 from config import login_manager
 
 
@@ -38,30 +38,29 @@ class User(UserMixin, db.Model):
     def generate_confirmation_token(self, expiration=604800):
         """Generate a confirmation token to email a new user."""
 
-        s = Serializer(current_app.config["SECRET_KEY"], expiration)
-        return s.dumps({"confirm": self.id})
+        return get_jws_token({"confirm": self.id}, expiration)
 
     def generate_email_change_token(self, new_email, expiration=3600):
         """Generate an email change token to email an existing user."""
-        s = Serializer(current_app.config["SECRET_KEY"], expiration)
-        return s.dumps({"change_email": self.id, "new_email": new_email})
+        return get_jws_token(
+            {"change_email": self.id, "new_email": new_email}, expiration
+        )
 
     def generate_password_reset_token(self, expiration=3600):
         """
         Generate a password reset change token to email to an existing user.
         """
-        s = Serializer(current_app.config["SECRET_KEY"], expiration)
-        return s.dumps({"reset": self.id})
+        return get_jws_token({"reset": self.id}, expiration)
 
     def confirm_account(self, token):
         """Verify that the provided token is for this user's id."""
-        s = Serializer(current_app.config["SECRET_KEY"])
         try:
-            data = s.loads(token)
-        except (BadSignature, SignatureExpired):
+            data = verify_jws_token(token)
+        except BadSignatureError:
             return False
         if data.get("confirm") != self.id:
             return False
+
         self.confirmed = True
         db.session.add(self)
         db.session.commit()
@@ -69,13 +68,13 @@ class User(UserMixin, db.Model):
 
     def change_email(self, token):
         """Verify the new email for this user."""
-        s = Serializer(current_app.config["SECRET_KEY"])
         try:
-            data = s.loads(token)
-        except (BadSignature, SignatureExpired):
+            data = verify_jws_token(token)
+        except BadSignatureError:
             return False
         if data.get("change_email") != self.id:
             return False
+
         new_email = data.get("new_email")
         if new_email is None:
             return False
@@ -88,13 +87,13 @@ class User(UserMixin, db.Model):
 
     def reset_password(self, token, new_password):
         """Verify the new password for this user."""
-        s = Serializer(current_app.config["SECRET_KEY"])
         try:
-            data = s.loads(token)
-        except (BadSignature, SignatureExpired):
+            data = verify_jws_token(token)
+        except BadSignatureError:
             return False
         if data.get("reset") != self.id:
             return False
+
         self.password = new_password
         db.session.add(self)
         db.session.commit()
