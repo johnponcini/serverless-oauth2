@@ -4,7 +4,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from authlib.jose.errors import BadSignatureError
 
 from app import db
-from app.auth.signature import get_jws_token, verify_jws_token
+from app.oauth.signature import get_jws_token, verify_jws_token
 from config import login_manager
 
 
