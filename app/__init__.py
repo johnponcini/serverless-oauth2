@@ -15,7 +15,7 @@ def create_app(config_name="development"):
     config[config_name].init_app(app, db)
 
     # OAuth2
-    from .auth import config_oauth
+    from .oauth import config_oauth
 
     config_oauth(app)
 
@@ -24,7 +24,7 @@ def create_app(config_name="development"):
 
     app.register_blueprint(main_blueprint)
 
-    from .auth import oauth as oauth_blueprint
+    from .oauth import oauth as oauth_blueprint
 
     app.register_blueprint(oauth_blueprint, url_prefix="/oauth")
 
