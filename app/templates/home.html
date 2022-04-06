@@ -19,7 +19,8 @@
 <br><a href="{{ url_for('.create_client') }}">Create Client</a>
 
 {% else %}
-<form action="" method="post">
+<form action="" method="post" role="form">
+  {{ form.hidden_tag() }}
   <input type="text" name="username" placeholder="username">
   <button type="submit">Login / Signup</button>
 </form>
