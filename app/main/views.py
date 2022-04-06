@@ -26,7 +26,7 @@ def home():
         username = request.form.get("username")
         user = User.query.filter_by(username=username).first()
         if not user:
-            user = User(username=username)
+            user = User(name=username)
             db.session.add(user)
             db.session.commit()
         session["id"] = user.id
