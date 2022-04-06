@@ -2,9 +2,9 @@ from flask import Blueprint, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from authlib.oauth2 import OAuth2Error
 from app.account.views import User
-from app.auth import authorization
+from app.oauth import authorization
 
-oauth = Blueprint("auth", __name__)
+oauth = Blueprint("oauth", __name__)
 
 
 @oauth.route("/authorize", methods=["GET", "POST"])

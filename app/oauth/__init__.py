@@ -103,4 +103,4 @@ def config_oauth(app):
     require_oauth.register_token_validator(bearer_cls())
 
 
-from app.auth.views import oauth
+from app.oauth.views import oauth

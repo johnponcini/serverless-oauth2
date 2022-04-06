@@ -21,7 +21,8 @@
       "MAIL_PORT": "587",
       "MAIL_USERNAME": "",
       "MAIL_PASSWORD": "",
-      "MAIL_USE_TLS": "True"
+      "MAIL_USE_TLS": "True",
+      "SECRET_KEY": "secret"
     }
   },
   "development": {
