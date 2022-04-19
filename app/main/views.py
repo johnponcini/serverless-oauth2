@@ -23,6 +23,8 @@ def index():
 
 @main.route("/", methods=("GET", "POST"))
 def home():
+    if current_user.is_anonymous:
+        return recirect(url_for("account.login"))
     if request.method == "POST":
         username = request.form.get("username")
         user = User.query.filter_by(username=username).first()
