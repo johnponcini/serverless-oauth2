@@ -36,7 +36,7 @@ def home():
         if next_page:
             return redirect(next_page)
         return redirect("/")
-    user = current_user()
+    user = current_user
     if user:
         clients = OAuth2Client.query.filter_by(user_id=user.id).all()
     else:
@@ -53,7 +53,7 @@ def logout():
 
 @main.route("/create_client", methods=("GET", "POST"))
 def create_client():
-    user = current_user()
+    user = current_user
     if not user:
         return redirect("/")
     if request.method == "GET":
