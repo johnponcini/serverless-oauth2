@@ -13,13 +13,14 @@ main = Blueprint("main", __name__)
 def split_by_crlf(s):
     return [v for v in s.splitlines() if v]
 
+"""
 @main.route("/")
 def index():
     if current_user.is_anonymous:
         return redirect(url_for("account.login"))
     return redirect(url_for("main.index"))
-
 """
+
 @main.route("/", methods=("GET", "POST"))
 def home():
     if request.method == "POST":
@@ -42,7 +43,7 @@ def home():
         clients = []
 
     return render_template("home.html", user=user, clients=clients)
-"""
+
 
 @main.route("/logout")
 def logout():
