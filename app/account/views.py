@@ -42,7 +42,7 @@ def register():
             user_name=form.name.data,
             confirm_link=confirm_link,
         )
-        return redirect(url_for("main.index"))
+        return redirect(url_for("main.home"))
     return render_template("account/register.html", form=form)
 
 
