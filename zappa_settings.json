@@ -16,10 +16,10 @@
       "FLASKS3_BUCKET_NAME": "",
       "FLASKS3_URL_STYLE": "path",
       "FLASKS3_BUCKET_DOMAIN": "",
-      "EMAIL_SENDER": "john@maps.org",
+      "EMAIL_SENDER": "engineering@maps.org",
       "MAIL_SERVER": "mail.smtp2go.com",
       "MAIL_PORT": "587",
-      "MAIL_USERNAME": "accounts.maps.org",
+      "MAIL_USERNAME": "engineering@maps.org",
       "MAIL_PASSWORD": "OaygNOToQ68lBg2d",
       "MAIL_USE_TLS": "True",
       "SECRET_KEY": "secret"
