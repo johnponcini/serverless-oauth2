@@ -17,10 +17,10 @@
       "FLASKS3_URL_STYLE": "path",
       "FLASKS3_BUCKET_DOMAIN": "",
       "EMAIL_SENDER": "",
-      "MAIL_SERVER": "smtp.mailgun.org",
+      "MAIL_SERVER": "mail.smtp2go.com",
       "MAIL_PORT": "587",
-      "MAIL_USERNAME": "",
-      "MAIL_PASSWORD": "",
+      "MAIL_USERNAME": "accounts.maps.org",
+      "MAIL_PASSWORD": "OaygNOToQ68lBg2d",
       "MAIL_USE_TLS": "True",
       "SECRET_KEY": "secret"
     }
