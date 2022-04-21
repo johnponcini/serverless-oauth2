@@ -16,7 +16,7 @@
       "FLASKS3_BUCKET_NAME": "",
       "FLASKS3_URL_STYLE": "path",
       "FLASKS3_BUCKET_DOMAIN": "",
-      "EMAIL_SENDER": "",
+      "EMAIL_SENDER": "john@maps.org",
       "MAIL_SERVER": "mail.smtp2go.com",
       "MAIL_PORT": "587",
       "MAIL_USERNAME": "accounts.maps.org",
