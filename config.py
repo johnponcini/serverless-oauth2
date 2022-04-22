@@ -50,7 +50,7 @@ class Config:
     ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD") or "password"
     ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL")
     EMAIL_SUBJECT_PREFIX = "[{}]".format(APP_NAME)
-    EMAIL_SENDER = "{app_name} Admin <{email}>".format(
+    EMAIL_SENDER = "{app_name} Rick Doblin <{email}>".format(
         app_name=APP_NAME, email=MAIL_USERNAME
     )
 
