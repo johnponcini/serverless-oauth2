@@ -46,12 +46,12 @@ def home():
 
     return render_template("home.html", user=user, clients=clients)
 
-
+"""
 @main.route("/logout")
 def logout():
     del session["id"]
     return redirect("/")
-
+"""
 
 @main.route("/create_client", methods=("GET", "POST"))
 def create_client():
