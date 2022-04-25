@@ -11,8 +11,7 @@ from authlib.integrations.sqla_oauth2 import (
 from authlib.oauth2.rfc6749 import grants
 from authlib.oauth2.rfc7636 import CodeChallenge
 from app import db
-from app.models.user import User
-from app.models.oauth2 import OAuth2Client, OAuth2AuthorizationCode, OAuth2Token
+from app.models import User, OAuth2Client, OAuth2AuthorizationCode, OAuth2Token
 
 
 class AuthorizationCodeGrant(grants.AuthorizationCodeGrant):
