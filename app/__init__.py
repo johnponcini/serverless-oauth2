@@ -16,10 +16,6 @@ def create_app(config_name="development"):
 
     # Admin
 
-    from .admin import config_admin
-
-    config_admin(app, db)
-
     # OAuth2
     from .oauth import config_oauth
 
@@ -37,5 +33,9 @@ def create_app(config_name="development"):
     from .account import account as account_blueprint
 
     app.register_blueprint(account_blueprint, url_prefix="/account")
+
+    from .admin import config_admin
+
+    config_admin(app, db)
 
     return app
