@@ -11,7 +11,7 @@ from wtforms.fields import (
 )
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
-from ..models import User
+from app.models import User
 
 
 class LoginForm(FlaskForm):
