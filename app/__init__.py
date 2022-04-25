@@ -14,6 +14,12 @@ def create_app(config_name="development"):
     app.config.from_object(config[config_name])
     config[config_name].init_app(app, db)
 
+    # Admin
+
+    from .admin import config_admin
+
+    config_admin(app, db)
+
     # OAuth2
     from .oauth import config_oauth
 
