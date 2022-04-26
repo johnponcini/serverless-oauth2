@@ -9,23 +9,26 @@ oauth = Blueprint("oauth", __name__)
 
 @oauth.route("/authorize", methods=["GET", "POST"])
 def authorize():
-    user = current_user()
+    
     # if user log status is not true (Auth server), then to log it in
-    if not user:
-        return redirect(url_for("website.routes.home", next=request.url))
+    if current_user.is_anonymous:
+        return redirect(url_for("account.login", next=request.url))
     if request.method == "GET":
         try:
-            grant = authorization.validate_consent_request(end_user=user)
+            grant = authorization.validate_consent_request(end_user=current_user)
         except OAuth2Error as error:
             return error.error
-        return render_template("authorize.html", user=user, grant=grant)
-    if not user and "username" in request.form:
+        return render_template("authorize.html", user=current_user, grant=grant)
+
+    if current_user.is_anonymous and request.args.get("email"):
         username = request.form.get("username")
         user = User.query.filter_by(username=username).first()
+
     if request.form["confirm"]:
         grant_user = user
     else:
         grant_user = None
+
     return authorization.create_authorization_response(grant_user=grant_user)
 
 
