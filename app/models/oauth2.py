@@ -7,6 +7,7 @@ from authlib.integrations.sqla_oauth2 import (
 )
 
 from app import db
+from app.models.user import User
 
 
 class OAuth2Client(db.Model, OAuth2ClientMixin):

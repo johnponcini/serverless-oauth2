@@ -11,7 +11,8 @@ from authlib.integrations.sqla_oauth2 import (
 from authlib.oauth2.rfc6749 import grants
 from authlib.oauth2.rfc7636 import CodeChallenge
 from app import db
-from app.models import User, OAuth2Client, OAuth2AuthorizationCode, OAuth2Token
+from app.models.user import User
+from app.models.oauth2 import OAuth2Client, OAuth2AuthorizationCode, OAuth2Token
 
 
 class AuthorizationCodeGrant(grants.AuthorizationCodeGrant):
@@ -22,16 +23,16 @@ class AuthorizationCodeGrant(grants.AuthorizationCodeGrant):
     ]
 
     def save_authorization_code(self, code, request):
-        code_challenge = request.data.get("code_challenge")
-        code_challenge_method = request.data.get("code_challenge_method")
+        #code_challenge = request.data.get("code_challenge")
+        #code_challenge_method = request.data.get("code_challenge_method")
         auth_code = OAuth2AuthorizationCode(
             code=code,
             client_id=request.client.client_id,
             redirect_uri=request.redirect_uri,
             scope=request.scope,
-            user_id=request.user.id,
-            code_challenge=code_challenge,
-            code_challenge_method=code_challenge_method,
+            user_id=request.user.id
+            #code_challenge=code_challenge,
+            #code_challenge_method=code_challenge_method,
         )
         db.session.add(auth_code)
         db.session.commit()
@@ -53,9 +54,13 @@ class AuthorizationCodeGrant(grants.AuthorizationCodeGrant):
 
 
 class PasswordGrant(grants.ResourceOwnerPasswordCredentialsGrant):
-    def authenticate_user(self, username, password):
-        user = User.query.filter_by(username=username).first()
-        if user is not None and user.check_password(password):
+    def authenticate_user(self, email, password):
+        user = User.query.filter_by(email=email).first()
+        if (
+            user is not None
+            and user.password_hash is not None
+            and user.verify_password(password)
+        ):
             return user
 
 
