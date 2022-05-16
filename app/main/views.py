@@ -1,3 +1,4 @@
+import os
 import time
 from flask import Blueprint, request, session, url_for
 from flask import render_template, redirect, jsonify
@@ -8,6 +9,10 @@ from authlib.integrations.flask_oauth2 import current_token
 from app.models import db, User, OAuth2Client
 from app.oauth import require_oauth
 from app.oauth.forms import RegisterClientForm
+
+import stripe
+
+stripe.api_key =  os.environ.get("STRIPE_SECRET")
 
 main = Blueprint("main", __name__)
 
@@ -43,10 +48,20 @@ def home():
     user = current_user
     if user:
         clients = OAuth2Client.query.filter_by(user_id=user.id).all()
+        try:
+            customer = stripe.Customer.search(query="email:'{}'".format(user.email))
+            customer_id = customer.data[0].id
+            session = stripe.billing_portal.Session.create(
+                customer=customer_id,
+                return_url=url_for("main.home"),
+            )
+            portal_url = session.url
+        except:
+            portal_url = None
     else:
         clients = []
 
-    return render_template("home.html", user=user, clients=clients)
+    return render_template("home.html", user=user, clients=clients, portal_url=portal_url)
 
 """
 @main.route("/logout")

@@ -18,6 +18,10 @@
 
 <br><a href="{{ url_for('.create_client') }}">Create Client</a>
 
+  {% if portal_url %}
+    <br><a href="{{ portal_url }}">Customer Portal</a>
+  {% endif %}
+
 {% else %}
 <form action="" method="post" role="form">
   {{ form.hidden_tag() }}
