@@ -56,7 +56,7 @@ def home():
             print(customer_id)
             session = stripe.billing_portal.Session.create(
                 customer=customer_id,
-                return_url=url_for("main.home"),
+                return_url=request.base_url,
             )
             portal_url = session.url
         except:
