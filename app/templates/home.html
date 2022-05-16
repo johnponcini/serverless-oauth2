@@ -24,7 +24,7 @@
 
   {% if subscriptions %}
     {% for subscription in subscriptions.data %}
-      <p>${{ subscription['items']['data'][0] }}</p>
+      <p>${{ subscription['items']['data'][0]['plan']['amount']|int / 100 }}</p>
     {% endfor %}
   {% endif %}
 {% else %}
