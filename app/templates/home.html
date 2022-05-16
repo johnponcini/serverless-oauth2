@@ -23,10 +23,17 @@
   {% endif %}
 
   {% if subscriptions %}
+    <b>Subscriptions</b>
     {% for subscription in subscriptions.data %}
       {% set amount = subscription['items']['data'][0]['plan']['amount']|int / 100 %}
       {% set interval = subscription['items']['data'][0]['plan']['interval'] %}
       <p>${{ '%0.2f' % amount|float }} / {{ interval }}</p>
+    {% endfor %}
+  {% endif %}
+  {% if donations %}
+    <b>Donations</b>
+    {% for donation in donations %}
+      <p>{{ donation }}</p>
     {% endfor %}
   {% endif %}
 {% else %}

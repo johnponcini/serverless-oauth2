@@ -10,6 +10,8 @@ from app.models import db, User, OAuth2Client
 from app.oauth import require_oauth
 from app.oauth.forms import RegisterClientForm
 
+from datetime import datetime
+
 import stripe
 
 stripe.api_key =  os.environ.get("STRIPE_SECRET_KEY")
@@ -59,6 +61,14 @@ def home():
                 return_url=request.base_url,
             )
             subscriptions = stripe.Subscription.list(customer=customer_id)
+            charges = stripe.Charge.list(customer=customer_id, limit=25)
+            donations = []
+            for charge in charges.data:
+                if charge["paid"]:
+                    amount = charge["amount"]
+                    date = datetime.utcfromtimestamp(charge["created"]).strftime("%Y-%m-%d")
+                    donations.append((amount, date))
+            
             portal_url = session.url
         except:
             subscriptions = None
@@ -66,7 +76,7 @@ def home():
     else:
         clients = []
 
-    return render_template("home.html", user=user, clients=clients, portal_url=portal_url, subscriptions=subscriptions)
+    return render_template("home.html", user=user, clients=clients, portal_url=portal_url, subscriptions=subscriptions, donations=donations)
 
 """
 @main.route("/logout")
