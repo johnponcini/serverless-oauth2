@@ -24,7 +24,7 @@
 
   {% if subscriptions %}
     {% for subscription in subscriptions.data %}
-      <p>${{ subscription.items}}/p>
+      <p>${{ subscription['items'] }}/p>
     {% endfor %}
   {% endif %}
 {% else %}
