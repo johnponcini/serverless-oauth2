@@ -51,6 +51,8 @@ def home():
         try:
             customer = stripe.Customer.search(query="email:'{}'".format(user.email))
             customer_id = customer.data[0].id
+            print(user.email)
+            print(customer_id)
             session = stripe.billing_portal.Session.create(
                 customer=customer_id,
                 return_url=url_for("main.home"),
