@@ -22,6 +22,11 @@
     <br><a href="{{ portal_url }}">Customer Portal</a>
   {% endif %}
 
+  {% if subscriptions %}
+    {% for subscription in subscripitons.data %}
+      <p>subscription</p>
+    {% endfor %}
+  {% endif %}
 {% else %}
 <form action="" method="post" role="form">
   {{ form.hidden_tag() }}

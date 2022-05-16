@@ -58,13 +58,15 @@ def home():
                 customer=customer_id,
                 return_url=request.base_url,
             )
+            subscriptions = stripe.Subscription.list(customer=customer_id)
             portal_url = session.url
         except:
+            subscriptions = None
             portal_url = None
     else:
         clients = []
 
-    return render_template("home.html", user=user, clients=clients, portal_url=portal_url)
+    return render_template("home.html", user=user, clients=clients, portal_url=portal_url, subscriptions=subscriptions)
 
 """
 @main.route("/logout")
