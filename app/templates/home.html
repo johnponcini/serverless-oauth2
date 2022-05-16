@@ -24,7 +24,7 @@
 
   {% if subscriptions %}
     {% for subscription in subscriptions.data %}
-      {% set amount = subscription['items']['data'][0]['plan']['amount']|int / 100}
+      {% set amount = subscription['items']['data'][0]['plan']['amount']|int / 100 %}
       <p>$({{ '%0.2f' % amount|float }}%)</p>
     {% endfor %}
   {% endif %}
