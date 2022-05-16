@@ -3,8 +3,9 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 from app import db
 from app.email import send_email
-from app.models import User, get_or_create
+from app.models import User, Role, get_or_create
 from app.account.forms import (
+    AssignRoleForm,
     ChangeEmailForm,
     ChangePasswordForm,
     CreatePasswordForm,
@@ -133,6 +134,23 @@ def logout():
 def manage():
     """Display a user's account information."""
     return render_template("account/manage.html", user=current_user, form=None)
+
+
+@account.route("/assign-role", methods=["GET", "POST"])
+def assign_role():
+    """Assign a role to a user."""
+    form = AssignRoleForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            user.roles.append(Role(name=form.name.data))
+            db.session.add(user)
+            db.session.commit()
+            flash("User has been added to Role.", "success")
+            return redirect(url_for("main.home"))
+        else:
+            flash("Invalid email or role.", "form-danger")
+    return render_template("account/assign_role.html", form=form)
 
 
 @account.route("/reset-password", methods=["GET", "POST"])

@@ -1,8 +1,10 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
+
 from authlib.oauth2 import OAuth2Error
-from app.account.views import User
 from app.oauth import authorization
+from app.account.views import User
+
 
 oauth = Blueprint("oauth", __name__)
 

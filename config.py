@@ -5,7 +5,7 @@ from flask_wtf import CSRFProtect
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_s3 import FlaskS3
-
+from flask_authorize import Authorize
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -16,6 +16,7 @@ s3 = FlaskS3()
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
 login_manager.login_view = "account.login"
+authorize = Authorize()
 
 # Environment variables
 if os.path.exists("config.env"):
@@ -74,6 +75,7 @@ class Config:
         csrf.init_app(app)
         s3.init_app(app)
         Migrate(app, db)
+        authorize.init_app(app)
 
 
 class DevelopmentConfig(Config):

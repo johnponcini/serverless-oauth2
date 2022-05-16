@@ -11,7 +11,7 @@ from wtforms.fields import (
 )
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
-from app.models import User
+from app.models import User, Role
 
 
 class LoginForm(FlaskForm):
@@ -86,6 +86,24 @@ class ChangeEmailForm(FlaskForm):
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError("Email already registered.")
+
+
+class AssignRoleForm(FlaskForm):
+    email = EmailField(
+        "Email", validators=[InputRequired(), Length(1, 64), Email()]
+    )
+    name = StringField(
+        "Role", validators=[InputRequired(), Length(1, 64)]
+    )
+    submit = SubmitField("Assign Role")
+
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data).first() is None:
+            raise ValidationError("Unknown email address.")
+
+    def validate_role(self, field):
+        if Role.query.filter_by(name=field.data).first() is None:
+            raise ValidationError("Unkown role")
 
 
 class DeleteForm(FlaskForm):

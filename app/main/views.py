@@ -2,10 +2,12 @@ import time
 from flask import Blueprint, request, session, url_for
 from flask import render_template, redirect, jsonify
 from flask_login import current_user, login_required
+
 from werkzeug.security import gen_salt
 from authlib.integrations.flask_oauth2 import current_token
 from app.models import db, User, OAuth2Client
 from app.oauth import require_oauth
+from app.oauth.forms import RegisterClientForm
 
 main = Blueprint("main", __name__)
 
@@ -54,7 +56,9 @@ def logout():
 """
 
 @main.route("/create_client", methods=("GET", "POST"))
+
 def create_client():
+    form = RegisterClientForm()
     user = current_user
     if not user:
         return redirect("/")
@@ -69,15 +73,14 @@ def create_client():
         user_id=user.id,
     )
 
-    form = request.form
     client_metadata = {
-        "client_name": form["client_name"],
-        "client_uri": form["client_uri"],
-        "grant_types": split_by_crlf(form["grant_type"]),
-        "redirect_uris": split_by_crlf(form["redirect_uri"]),
-        "response_types": split_by_crlf(form["response_type"]),
-        "scope": form["scope"],
-        "token_endpoint_auth_method": form["token_endpoint_auth_method"],
+        "client_name": form.client_name.data,
+        "client_uri": form.client_uri.data,
+        "grant_types": split_by_crlf(form.grant_type.data),
+        "redirect_uris": split_by_crlf(form.redirect_uri.data),
+        "response_types": split_by_crlf(form.response_type.data),
+        "scope": form.scope.data,
+        "token_endpoint_auth_method": form.token_endpoint_auth_method.data,
     }
     client.set_client_metadata(client_metadata)
 
