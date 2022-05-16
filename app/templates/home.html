@@ -24,7 +24,7 @@
 
   {% if subscriptions %}
     {% for subscription in subscriptions.data %}
-      <p>${{ subscription.items.data[0].plan.amount / 100 }} / {{ subscriton.items.data[0].plan.interval }}</p>
+      <p>${{ subscription.items}}/p>
     {% endfor %}
   {% endif %}
 {% else %}
