@@ -22,7 +22,8 @@
       "MAIL_USERNAME": "engineering@maps.org",
       "MAIL_PASSWORD": "OaygNOToQ68lBg2d",
       "MAIL_USE_TLS": "True",
-      "SECRET_KEY": "secret"
+      "SECRET_KEY": "secret",
+      "STRIPE_SECRET_KEY": "sk_test_0J15YgRZazmzvKAjpGukNHWg00PXu2OEkn"
     }
   },
   "development": {

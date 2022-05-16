@@ -12,7 +12,7 @@ from app.oauth.forms import RegisterClientForm
 
 import stripe
 
-stripe.api_key =  os.environ.get("STRIPE_SECRET")
+stripe.api_key =  os.environ.get("STRIPE_SECRET_KEY")
 
 main = Blueprint("main", __name__)
 
