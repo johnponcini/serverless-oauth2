@@ -1,3 +1,8 @@
+{% extends 'base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+{% block content %}
+
 <style>
   label, label > span { display: block; }
   label { margin: 15px 0; }
@@ -5,7 +10,17 @@
 
 <a href="{{ url_for('.home') }}">Home</a>
 
+{{ f.begin_form(form) }}
+  {{ f.render_form_field(form.client_name) }}
+  {{ f.render_form_field(form.client_uri) }}
 
+  {{ f.render_form_field(form.scope) }}
+  {{ f.render_form_field(form.redirect_uri) }}
+  {{ f.render_form_field(form.grant_type) }}
+  {{ f.render_form_field(form.response_type) }}
+  {{ f.render_form_field(form.token_endpoint_auth_method) }}
+  {{ f.render_form_field(form.submit, extra_classes="form-group mt-2") }}
+{{ f.end_form(form) }}
 
 <!--      
 <form action="" method="post">
@@ -44,3 +59,5 @@
   <button>Submit</button>
 </form>
  -->
+
+ {% endblock %}
