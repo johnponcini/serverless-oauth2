@@ -127,7 +127,7 @@ def create_client():
 
     db.session.add(client)
     db.session.commit()
-    return redirect("/")
+    return redirect(url_for('.home'))
 
 
 @main.route("/api/me")
