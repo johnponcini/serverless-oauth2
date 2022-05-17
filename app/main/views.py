@@ -71,6 +71,7 @@ def home():
             
             portal_url = session.url
         except:
+            donations = None
             subscriptions = None
             portal_url = None
     else:

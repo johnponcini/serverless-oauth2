@@ -23,7 +23,7 @@
   {% endif %}
 
   {% if subscriptions %}
-    <b>Subscriptions</b>
+    <br><b>Subscriptions</b>
     {% for subscription in subscriptions.data %}
       {% set amount = subscription['items']['data'][0]['plan']['amount']|int / 100 %}
       {% set interval = subscription['items']['data'][0]['plan']['interval'] %}
