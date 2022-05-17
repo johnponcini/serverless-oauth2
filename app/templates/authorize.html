@@ -1,3 +1,8 @@
+{% extends 'base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+{% block content %}
+
 <p>The application <strong>{{grant.client.client_name}}</strong> is requesting:
 <strong>{{ grant.request.scope }}</strong>
 </p>
@@ -34,3 +39,5 @@
   <button>Submit</button>
 </form>
 -->
+
+{% endblock %}
