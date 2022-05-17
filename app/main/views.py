@@ -78,11 +78,11 @@ def home():
         except:
             donations = None
             subscriptions = None
-            session['portal'] = None
+            session.pop('portal')
     else:
         clients = []
 
-    return render_template("home.html", user=user, clients=clients, portal_url=session['portal'], subscriptions=subscriptions, donations=donations)
+    return render_template("home.html", user=user, clients=clients, portal_url=session.get('portal'), subscriptions=subscriptions, donations=donations)
 
 """
 @main.route("/logout")
