@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
-from authlib.oauth2 import OAuth2Error
+from authlib.oauth2 import OAuth2Error, OAuth2Request
 from app.oauth import authorization
 from app.account.views import User
 
@@ -17,7 +17,7 @@ def authorize():
         return redirect(url_for("account.login", next=request.url))
     if request.method == "GET":
         try:
-            grant = authorization.validate_consent_request(end_user=current_user)
+            grant = authorization.get_token_grant(request=OAuth2Request)
         except OAuth2Error as error:
             return error.error
         return render_template("authorize.html", user=current_user, grant=grant)
