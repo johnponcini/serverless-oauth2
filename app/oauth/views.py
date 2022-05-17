@@ -33,12 +33,12 @@ def authorize():
     else:
         grant_user = None
 
-    return authorization.create_authorization_response(grant_user=grant_user)
+    return authorization.create_authorization_response(request=request, grant_user=grant_user)
 
 
 @oauth.route("/token", methods=["POST"])
 def issue_token():
-    return authorization.create_token_response()
+    return authorization.create_token_response(request=request)
 
 
 @oauth.route("/revoke", methods=["POST"])
