@@ -29,3 +29,7 @@ class RegisterClientForm(FlaskForm):
         ("none", "none")
     ])
     submit = SubmitField("Create Client")
+
+class AuthorizeConsentForm(FlaskForm):
+    confirm = BooleanField("Yes")
+    submit = SubmitField("Allow")

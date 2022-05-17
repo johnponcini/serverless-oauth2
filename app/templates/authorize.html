@@ -6,6 +6,19 @@
   from You - a.k.a. <strong>{{ user.username }}</strong>
 </p>
 
+{% if not user %}
+  <p>You haven't logged in. <a href="/login">Login</a></p>
+
+{% else %}
+
+  {{ f.begin_form(form) }}
+    {{ f.render_form_field(form.confirm) }}
+    {{ f.render_form_field(form.submit, extra_classes="form-group mt-2") }}
+  {{ f.end_form(form) }}
+
+  {% endif %}
+
+  <!-- 
 <form action="" method="post">
   <label>
     <input type="checkbox" name="confirm">
@@ -20,3 +33,4 @@
   <br>
   <button>Submit</button>
 </form>
+-->

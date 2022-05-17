@@ -4,6 +4,7 @@ from flask_login import current_user, login_required
 from authlib.oauth2 import OAuth2Error, OAuth2Request
 from app.oauth import authorization
 from app.account.views import User
+from app.oauth.forms import AuthorizeConsentForm
 
 
 oauth = Blueprint("oauth", __name__)
@@ -11,7 +12,7 @@ oauth = Blueprint("oauth", __name__)
 
 @oauth.route("/authorize", methods=["GET", "POST"])
 def authorize():
-    
+    form = AuthorizeConsentForm
     # if user log status is not true (Auth server), then to log it in
     if current_user.is_anonymous:
         return redirect(url_for("account.login", next=request.url))
@@ -23,14 +24,16 @@ def authorize():
         return render_template(
             "authorize.html", 
             user=current_user,
-            grant=grant)
+            grant=grant,
+            form=form
+            )
         
 
     if current_user.is_anonymous and request.args.get("email"):
         username = request.form.get("username")
         user = User.query.filter_by(username=username).first()
 
-    if request.form["confirm"]:
+    if form.confirm.data:
         grant_user = user
     else:
         grant_user = None
