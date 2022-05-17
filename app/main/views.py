@@ -62,6 +62,7 @@ def home():
                     customer=customer_id,
                     return_url=request.base_url,
                 )
+                
             subscriptions = stripe.Subscription.list(customer=customer_id)
             charges = stripe.Charge.list(customer=customer_id, limit=25)
             donations = []
@@ -71,7 +72,7 @@ def home():
                     date = datetime.utcfromtimestamp(charge["created"]).strftime("%Y-%m-%d")
                     donations.append((amount, date))
             
-            portal_url = session['portal'].url
+            portal_url = session.get('portal').url
         except:
             donations = None
             subscriptions = None
