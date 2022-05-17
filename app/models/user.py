@@ -35,6 +35,9 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def get_user_id(self):
+        return self.id
+
     def generate_confirmation_token(self, expiration=604800):
         """Generate a confirmation token to email a new user."""
 
