@@ -67,7 +67,7 @@ class PasswordGrant(grants.ResourceOwnerPasswordCredentialsGrant):
 class RefreshTokenGrant(grants.RefreshTokenGrant):
     def authenticate_refresh_token(self, refresh_token):
         token = OAuth2Token.query.filter_by(refresh_token=refresh_token).first()
-        if token and token.is_refresh_token_active():
+        if token and not token.is_expired():
             return token
 
     def authenticate_user(self, credential):
