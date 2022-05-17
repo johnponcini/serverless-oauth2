@@ -1,6 +1,8 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
+from config import csrf
+
 from authlib.oauth2 import OAuth2Error, OAuth2Request
 from app.oauth import authorization
 from app.account.views import User
@@ -11,6 +13,7 @@ oauth = Blueprint("oauth", __name__)
 
 
 @oauth.route("/authorize", methods=["GET", "POST"])
+@csrf.exempt
 def authorize():
     form = AuthorizeConsentForm()
     # if user log status is not true (Auth server), then to log it in
@@ -37,10 +40,12 @@ def authorize():
 
 
 @oauth.route("/token", methods=["POST"])
+@csrf.exempt
 def issue_token():
     return authorization.create_token_response(request=request)
 
 
 @oauth.route("/revoke", methods=["POST"])
+@csrf.exempt
 def revoke_token():
     return authorization.create_endpoint_response("revocation")
