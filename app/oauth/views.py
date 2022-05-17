@@ -16,11 +16,15 @@ def authorize():
     if current_user.is_anonymous:
         return redirect(url_for("account.login", next=request.url))
     if request.method == "GET":
-        try:
-            grant = authorization.get_token_grant(request=OAuth2Request)
-        except OAuth2Error as error:
-            return error.error
-        return render_template("authorize.html", user=current_user, grant=grant)
+        grant = authorization.get_consent_grant(end_user=current_user)
+        #client = grant.client
+        #scope = client.get_allowed_scope(grant.request.scope)
+        
+        return render_template(
+            "authorize.html", 
+            user=current_user,
+            grant=grant)
+        
 
     if current_user.is_anonymous and request.args.get("email"):
         username = request.form.get("username")
