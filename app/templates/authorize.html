@@ -17,7 +17,7 @@
 {% else %}
 
   {{ f.begin_form(form) }}
-    {{ f.render_form_field(form.confirm) }}
+    {{ f.render_form_input(form.confirm) }}
     {{ f.render_form_field(form.submit, extra_classes="form-group mt-2") }}
   {{ f.end_form(form) }}
 
