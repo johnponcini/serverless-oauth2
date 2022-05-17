@@ -134,8 +134,7 @@ def create_client():
 @require_oauth("profile")
 def api_me():
     user = current_token.user
-    return jsonify(id=user.id, username=user.username)
-
+    return jsonify(id=user.id, username=user.email)
 
 """
 @main.route("/")
