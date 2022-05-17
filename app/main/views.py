@@ -99,7 +99,7 @@ def create_client():
     if not user:
         return redirect("/")
     if request.method == "GET":
-        return render_template("create_client.html")
+        return render_template("create_client.html", form=form)
 
     client_id = gen_salt(24)
     client_id_issued_at = int(time.time())
