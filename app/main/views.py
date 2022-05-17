@@ -57,12 +57,14 @@ def home():
             print(user.email)
             print(customer_id)
 
-            if not session.get('portal'):
-                session['portal'] = stripe.billing_portal.Session.create(
+            if 'portal' not in session:
+                portal = stripe.billing_portal.Session.create(
                     customer=customer_id,
                     return_url=request.base_url,
                 )
-                
+                session['portal'] = portal.url
+
+
             subscriptions = stripe.Subscription.list(customer=customer_id)
             charges = stripe.Charge.list(customer=customer_id, limit=25)
             donations = []
@@ -72,15 +74,15 @@ def home():
                     date = datetime.utcfromtimestamp(charge["created"]).strftime("%Y-%m-%d")
                     donations.append((amount, date))
             
-            portal_url = session.get('portal').url
+            
         except:
             donations = None
             subscriptions = None
-            portal_url = None
+            session['portal'] = None
     else:
         clients = []
 
-    return render_template("home.html", user=user, clients=clients, portal_url=portal_url, subscriptions=subscriptions, donations=donations)
+    return render_template("home.html", user=user, clients=clients, portal_url=session['portal'], subscriptions=subscriptions, donations=donations)
 
 """
 @main.route("/logout")
