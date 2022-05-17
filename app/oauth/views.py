@@ -12,7 +12,7 @@ oauth = Blueprint("oauth", __name__)
 
 @oauth.route("/authorize", methods=["GET", "POST"])
 def authorize():
-    form = AuthorizeConsentForm
+    form = AuthorizeConsentForm()
     # if user log status is not true (Auth server), then to log it in
     if current_user.is_anonymous:
         return redirect(url_for("account.login", next=request.url))
