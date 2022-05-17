@@ -57,7 +57,7 @@ def home():
             print(user.email)
             print(customer_id)
 
-            if not session['portal']:
+            if not session.get('portal'):
                 session['portal'] = stripe.billing_portal.Session.create(
                     customer=customer_id,
                     return_url=request.base_url,
