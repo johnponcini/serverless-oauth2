@@ -28,13 +28,8 @@ def authorize():
             form=form
             )
         
-
-    if current_user.is_anonymous and request.args.get("email"):
-        username = request.form.get("username")
-        user = User.query.filter_by(username=username).first()
-
     if form.confirm.data:
-        grant_user = user
+        grant_user = current_user
     else:
         grant_user = None
 
