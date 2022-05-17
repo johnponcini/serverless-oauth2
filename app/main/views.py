@@ -49,10 +49,6 @@ def home():
             return redirect(next_page)
         return redirect("/")
     user = current_user
-    try:
-        session.pop('portal')
-    except:
-        pass
     if user:
         clients = OAuth2Client.query.filter_by(user_id=user.id).all()
         try:
