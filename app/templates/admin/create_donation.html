@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% import 'macros/form_macros.html' as f %}
+
+{% block content %}
+
+{{ f.begin_form(form) }}
+    {{ f.render_form_field(form.email) }}
+    {{ f.render_form_field(form.amount) }}
+    {{ f.render_form_field(form.submit, extra_classes="form-group mt-2") }}
+{{ f.end_form(form) }}
+
+
+
+{% endblock %}

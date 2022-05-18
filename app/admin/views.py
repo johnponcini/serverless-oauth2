@@ -1,5 +1,5 @@
 import os
-import time
+from datetime import datetime 
 import stripe
 from simple_salesforce import Salesforce
 
@@ -14,11 +14,11 @@ sf = Salesforce(instance_url="https://maps501c3--arkustest.lightning.force.com",
 sfadmin = Blueprint("sfadmin", __name__)
 
 
-@sfadmin.route("/create-customer", methods=["GET", "POST"])
-def create_customer():
+@sfadmin.route('/create_contact', methods=['GET', 'POST'])
+def create_contact():
 
     if current_user.is_anonymous:
-        return redirect(url_for("account.login"))
+        return redirect(url_for('account.login'))
 
     if current_user.role_id != 1:
         return render_template('403.html')      
@@ -37,3 +37,35 @@ def create_customer():
         return redirect(url_for('main.home'))
 
     return render_template('admin/create_contact.html', form=form)
+
+
+@sfadmin.route('/create_donation', methods=['GET', 'POST'])
+def create_donation():
+
+    if current_user.is_anonymous:
+        return redirect(url_for('account.login'))
+
+    if current_user.role_id != 1:
+        return render_template('403.html')      
+
+    form = CreateDonationForm()
+
+    if request.method == "POST":
+
+        account_id = sf.query("SELECT Id From Contact WHERE Email = '{}'".format(form.email.data))
+
+        sf.Opportunity.create(
+            {
+                'AccountId': account_id,
+                'Ammount': form.amount.data,
+                'Name': 'API Test',
+                'Type': 'Donation',
+                'StageName': 'Posted',
+                'closedate': datetime.now().strftime('%Y-%m-%d')
+            }
+        )
+
+        return redirect(url_for('main.home'))
+
+    return render_template('admin/create_donation.html', form=form)
+
