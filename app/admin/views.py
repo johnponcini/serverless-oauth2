@@ -16,7 +16,7 @@ sfadmin = Blueprint("sfadmin", __name__)
 
 @sfadmin.route("/create-customer", methods=["GET", "POST"])
 def create_customer():
-    form = CreateContactForm
+    form = CreateContactForm()
 
     if request.method == "POST":
         sf.Contact.create(
