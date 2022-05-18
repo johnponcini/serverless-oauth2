@@ -2,6 +2,10 @@
 <style>pre{white-space:wrap}</style>
 <div>Logged in as <strong>{{user.name}}</strong> (<a href="{{ url_for('account.logout') }}">Log Out</a>)</div>
 
+  {% if admin %}
+    <p>You're an administrator!</p>
+  {% endif %}
+
 {% for client in clients %}
 <pre>
 <strong>Client Info</strong>

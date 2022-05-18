@@ -67,7 +67,7 @@ def home():
         # Create a new customer if one does not already exist
         if not customer_id:
             customer = stripe.Customer.create(email=user.email, name=user.name)
-
+            customer_id = customer.id
 
         portal = stripe.billing_portal.Session.create(
             customer=customer_id,
@@ -83,13 +83,15 @@ def home():
                 amount = charge['amount']
                 date = datetime.utcfromtimestamp(charge['created']).strftime('%Y-%m-%d')
                 donations.append((amount, date))
-
+        
     else:
         subscriptions=None
         donations=None
         clients = []
 
-    return render_template("home.html", user=user, clients=clients, portal_url=session.get('portal'), subscriptions=subscriptions, donations=donations)
+    admin = current_user.has_role("Administrator"):
+
+    return render_template("home.html", user=user, clients=clients, portal_url=session.get('portal'), subscriptions=subscriptions, donations=donations, admin=admin)
 
 """
 @main.route("/logout")

@@ -101,6 +101,9 @@ class User(UserMixin, db.Model):
         db.session.add(self)
         db.session.commit()
         return True
+
+    def __str__(self):
+        return self.email
         
     def __repr__(self):
         return "<User '%s'>" % self.name
