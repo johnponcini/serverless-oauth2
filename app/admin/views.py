@@ -52,7 +52,7 @@ def create_donation():
 
     if request.method == "POST":
 
-        account_id = sf.query("SELECT Id From Contact WHERE Email = '{}'".format(form.email.data))
+        account_id = sf.query("SELECT Id From Contact WHERE Email = '{}'".format(form.email.data))['records'][0]['Id']
 
         sf.Opportunity.create(
             {
