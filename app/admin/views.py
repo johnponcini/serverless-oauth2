@@ -18,12 +18,15 @@ admin = Blueprint("admin", __name__)
 def create_customer():
     form = CreateContactForm
 
-    sf.Contact.create(
-        {
-            'FirstName' : form.first_name.data, 
-            'LastName': form.last_name.data, 
-            'Email': form.email.data,
-        }
-    )
+    if request.method == "POST":
+        sf.Contact.create(
+            {
+                'FirstName' : form.first_name.data, 
+                'LastName': form.last_name.data, 
+                'Email': form.email.data,
+            }
+        )
 
-    return redirect(url_for('admin'))
+        return redirect(url_for('admin'))
+
+    return render_template('admin/create_contact.html', form=form)
