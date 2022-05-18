@@ -27,6 +27,6 @@ def create_customer():
             }
         )
 
-        return redirect(url_for('admin'))
+        return redirect(url_for('main.home'))
 
     return render_template('admin/create_contact.html', form=form)
