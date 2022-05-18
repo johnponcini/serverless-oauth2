@@ -19,5 +19,5 @@ class CreateContactForm(FlaskForm):
 
 class CreateDonationForm(FlaskForm):
     email = EmailField("Email", validators=[InputRequired(), Length(1, 64), Email()])
-    amount = IntegerField("Amount", validators=[InputRequired])
+    amount = IntegerField("Amount", validators=[InputRequired()])
     submit = SubmitField("Donate")
