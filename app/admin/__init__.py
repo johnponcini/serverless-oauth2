@@ -34,7 +34,7 @@ class AdminDashboardView(AdminIndexView):
             return True
         return False
 
-    @expose('/')
+    @expose('/admin/')
     def index(self):
 
         return self.render(
