@@ -11,10 +11,10 @@ from app.admin.forms import CreateContactForm, CreateDonationForm
 
 sf = Salesforce(instance_url="https://maps501c3--arkustest.lightning.force.com", username="digital@maps.org", password="eu3HxxbyX!J_", security_token="dUdkHC149SfzJkdC0YVXYf0W", domain="test")
 
-admin = Blueprint("admin", __name__)
+sfadmin = Blueprint("sfadmin", __name__)
 
 
-@admin.route("/create-customer", methods=["GET", "POST"])
+@sfadmin.route("/create-customer", methods=["GET", "POST"])
 def create_customer():
     form = CreateContactForm
 

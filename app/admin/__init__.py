@@ -2,7 +2,7 @@ from flask_admin import expose, Admin, AdminIndexView
 from flask_login import current_user
 from flask_admin.contrib.sqla import ModelView
 
-from app.admin.views import admin
+from app.admin.views import sfadmin
 from app.models.user import User, Role
 from app.models.oauth2 import OAuth2Client
 
