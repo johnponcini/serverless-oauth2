@@ -89,7 +89,10 @@ def home():
         donations=None
         clients = []
 
-    admin = current_user.has_role("Administrator")
+    if current_user.role == 1:
+        admin = True
+    else:
+        admin = False
 
     return render_template("home.html", user=user, clients=clients, portal_url=session.get('portal'), subscriptions=subscriptions, donations=donations, admin=admin)
 
