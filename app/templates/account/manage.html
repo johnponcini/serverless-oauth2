@@ -24,12 +24,6 @@
       </li>
     {% endfor %}
     </ul>
-  {% if current_user.is_admin %}
-    <hr />
-    <ul class="menu-list">
-      <li><a href="{{ url_for('account.admin') }}">Manage users</a></li>
-    </ul>
-  {% endif %}
   </aside>
 </div>
 {% endmacro %}
