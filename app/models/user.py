@@ -104,7 +104,7 @@ class User(UserMixin, db.Model):
 
     def __str__(self):
         return self.email
-        
+
     def __repr__(self):
         return "<User '%s'>" % self.name
 
