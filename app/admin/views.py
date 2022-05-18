@@ -65,7 +65,12 @@ def create_donation():
                 'Name': 'API Test',
                 'Type': 'Donation',
                 'StageName': 'Posted',
-                'closedate': datetime.now().strftime('%Y-%m-%d')
+                'closedate': datetime.now().strftime('%Y-%m-%d'),
+                'CampainId': 'General Support',
+                'Purpose__c': 'Unrestricted',
+                'Tender_Type__c': 'Stripe',
+                'Platform_Source__c': 'MAPSi',
+                'Donation_Page__c': 'Test Page'
             }
         )
 
