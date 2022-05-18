@@ -35,7 +35,10 @@ def index():
 def home():
     if current_user.is_anonymous:
         return redirect(url_for("account.login"))
+
+    
     if request.method == "POST":
+        '''
         username = request.form.get("username")
         user = User.query.filter_by(username=username).first()
         if not user:
@@ -44,42 +47,46 @@ def home():
             db.session.commit()
         session["id"] = user.id
         # if user is not just to log in, but need to head back to the auth page, then go for it
+        '''
         next_page = request.args.get("next")
         if next_page:
             return redirect(next_page)
         return redirect("/")
+
     user = current_user
     if user:
         clients = OAuth2Client.query.filter_by(user_id=user.id).all()
+
+        # Search for an existing Stripe customer 
         try:
             customer = stripe.Customer.search(query="email:'{}'".format(user.email))
             customer_id = customer.data[0].id
-            print(user.email)
-            print(customer_id)
-
-            if 'portal' not in session:
-                portal = stripe.billing_portal.Session.create(
-                    customer=customer_id,
-                    return_url=request.base_url,
-                )
-                session['portal'] = portal.url
-
-
-            subscriptions = stripe.Subscription.list(customer=customer_id)
-            charges = stripe.Charge.list(customer=customer_id, limit=25)
-            donations = []
-            for charge in charges.data:
-                if charge["paid"]:
-                    amount = charge["amount"]
-                    date = datetime.utcfromtimestamp(charge["created"]).strftime("%Y-%m-%d")
-                    donations.append((amount, date))
-            
-            
+            session['customer'] = customer_id
         except:
-            donations = None
-            subscriptions = None
-            session.pop('portal')
+            customer_id = None
+        # Create a new customer if one does not already exist
+        if not customer_id:
+            customer = stripe.Customer.create(email=user.email, name=user.name)
+
+
+        portal = stripe.billing_portal.Session.create(
+            customer=customer_id,
+            return_url=request.base_url,
+        )
+        session['portal'] = portal.url
+
+        subscriptions = stripe.Subscription.list(customer=customer_id)
+        charges = stripe.Charge.list(customer=customer_id, limit=25)
+        donations = []
+        for charge in charges.data:
+            if charge['paid']:
+                amount = charge['amount']
+                date = datetime.utcfromtimestamp(charge['created']).strftime('%Y-%m-%d')
+                donations.append((amount, date))
+
     else:
+        subscriptions=None
+        donations=None
         clients = []
 
     return render_template("home.html", user=user, clients=clients, portal_url=session.get('portal'), subscriptions=subscriptions, donations=donations)
@@ -92,7 +99,6 @@ def logout():
 """
 
 @main.route("/create_client", methods=("GET", "POST"))
-
 def create_client():
     form = RegisterClientForm()
     user = current_user
