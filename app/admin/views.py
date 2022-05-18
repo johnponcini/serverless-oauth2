@@ -16,6 +16,13 @@ sfadmin = Blueprint("sfadmin", __name__)
 
 @sfadmin.route("/create-customer", methods=["GET", "POST"])
 def create_customer():
+
+    if current_user.is_anonymous:
+        return redirect(url_for("account.login"))
+
+    if current_user.role_id != 1:
+        return render_template('403.html')      
+      
     form = CreateContactForm()
 
     if request.method == "POST":
