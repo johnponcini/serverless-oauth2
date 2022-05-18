@@ -57,7 +57,7 @@ def create_donation():
         sf.Opportunity.create(
             {
                 'AccountId': account_id,
-                'Ammount': form.amount.data,
+                'Amount': form.amount.data,
                 'Name': 'API Test',
                 'Type': 'Donation',
                 'StageName': 'Posted',
