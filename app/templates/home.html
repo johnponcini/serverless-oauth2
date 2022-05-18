@@ -18,6 +18,10 @@
     <hr>
     {% endfor %}
 
+    <br><a href="{{ url_for('sfadmin.create_contact') }}">Create Contact</a>
+
+    <br><a href="{{ url_for('sfadmin.create_donation') }}">Create Donation</a>
+
     <br><a href="{{ url_for('.create_client') }}">Create Client</a>
 
   {% endif %}
