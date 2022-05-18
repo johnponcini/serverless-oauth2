@@ -89,7 +89,7 @@ def home():
         donations=None
         clients = []
 
-    admin = current_user.has_role("Administrator"):
+    admin = current_user.has_role("Administrator")
 
     return render_template("home.html", user=user, clients=clients, portal_url=session.get('portal'), subscriptions=subscriptions, donations=donations, admin=admin)
 
