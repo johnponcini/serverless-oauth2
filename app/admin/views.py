@@ -14,7 +14,7 @@ sf = Salesforce(instance_url="https://maps501c3--arkustest.lightning.force.com",
 admin = Blueprint("admin", __name__)
 
 
-@app.route("/create-customer", methods=["GET", "POST"])
+@admin.route("/create-customer", methods=["GET", "POST"])
 def create_customer():
     form = CreateContactForm
 
