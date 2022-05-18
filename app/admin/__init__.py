@@ -39,7 +39,7 @@ class AdminDashboardView(AdminIndexView):
         return self.render(
             'index.html',
         )
-s
+
 
 def config_admin(app, db):
     admin = Admin(app, index_view=AdminDashboardView())
