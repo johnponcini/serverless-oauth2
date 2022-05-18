@@ -89,7 +89,7 @@ def home():
         donations=None
         clients = []
 
-    if current_user.role == "Administrator":
+    if current_user.role_id == 1:
         admin = True
     else:
         admin = False
