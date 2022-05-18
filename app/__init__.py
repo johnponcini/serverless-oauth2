@@ -36,7 +36,7 @@ def create_app(config_name="development"):
     # Admin
     from .admin import sfadmin as admin_blueprint
 
-    app.register_blueprint(account_blueprint, url_prefix="/sfadmin")
+    app.register_blueprint(admin_blueprint, url_prefix="/sfadmin")
 
     from .admin import config_admin
 
