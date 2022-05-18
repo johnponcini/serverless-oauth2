@@ -38,7 +38,7 @@ class AdminDashboardView(AdminIndexView):
     def index(self):
 
         return self.render(
-            'index.html',
+            'admin/index.html',
         )
 
 
