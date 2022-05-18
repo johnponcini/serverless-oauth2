@@ -1,4 +1,4 @@
-from flask_admin import Admin
+from flask_admin import Admin, AdminIndexView
 from flask_login import current_user
 from flask_admin.contrib.sqla import ModelView
 
@@ -20,8 +20,22 @@ class AdminView(ModelView):
             return True
         return False
 
+class AdminDashboardView(AdminIndexView):
+
+    def is_accessible(self):
+        if not current_user.is_active or not current_user:
+            return False
+        if current_user.role_id == 1:
+            self.can_create = True
+            self.can_edit = True
+            self.can_delete = True
+            self.can_export = True
+            return True
+        return False
+
+
 def config_admin(app, db):
-    admin = Admin(app)
+    admin = Admin(app, index_view=AdminDashboardView())
     admin.add_view(AdminView(User, db.session))
     admin.add_view(AdminView(Role, db.session))
     admin.add_view(AdminView(OAuth2Client, db.session))
