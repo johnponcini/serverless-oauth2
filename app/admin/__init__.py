@@ -1,4 +1,4 @@
-from flask_admin import Admin, AdminIndexView
+from flask_admin import expose, Admin, AdminIndexView
 from flask_login import current_user
 from flask_admin.contrib.sqla import ModelView
 
