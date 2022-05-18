@@ -4,30 +4,34 @@
 
   {% if admin %}
     <p>You're an administrator!</p>
+    {% for client in clients %}
+    <pre>
+    <strong>Client Info</strong>
+      {%- for key in client.client_info %}
+      <strong>{{ key }}: </strong>{{ client.client_info[key] }}
+      {%- endfor %}
+    <strong>Client Metadata</strong>
+      {%- for key in client.client_metadata %}
+      <strong>{{ key }}: </strong>{{ client.client_metadata[key] }}
+      {%- endfor %}
+    </pre>
+    <hr>
+    {% endfor %}
+
+    <br><a href="{{ url_for('.create_client') }}">Create Client</a>
+
   {% endif %}
 
-{% for client in clients %}
-<pre>
-<strong>Client Info</strong>
-  {%- for key in client.client_info %}
-  <strong>{{ key }}: </strong>{{ client.client_info[key] }}
-  {%- endfor %}
-<strong>Client Metadata</strong>
-  {%- for key in client.client_metadata %}
-  <strong>{{ key }}: </strong>{{ client.client_metadata[key] }}
-  {%- endfor %}
-</pre>
-<hr>
-{% endfor %}
 
-<br><a href="{{ url_for('.create_client') }}">Create Client</a>
+
+
 
   {% if portal_url %}
     <br><a href="{{ portal_url }}">Customer Portal</a>
   {% endif %}
-
+    <br>
   {% if subscriptions %}
-    <br><b>Subscriptions</b>
+    <b>Subscriptions</b>
     {% for subscription in subscriptions.data %}
       {% set amount = subscription['items']['data'][0]['plan']['amount']|int / 100 %}
       {% set interval = subscription['items']['data'][0]['plan']['interval'] %}
@@ -37,7 +41,9 @@
   {% if donations %}
     <b>Donations</b>
     {% for donation in donations %}
-      <p>{{ donation }}</p>
+      {% set amount = donation[0]|int / 100 %}
+      {% set date = donation[1] %}
+      <p>${{ amount }} given on {{ date }}</p>
     {% endfor %}
   {% endif %}
 {% else %}
