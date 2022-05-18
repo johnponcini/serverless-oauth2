@@ -66,7 +66,7 @@ def create_donation():
                 'Type': 'Donation',
                 'StageName': 'Posted',
                 'closedate': datetime.now().strftime('%Y-%m-%d'),
-                'CampaignId': 'General Support',
+                'CampaignId': '7012f000000bOFfAAM',
                 'Purpose__c': 'Unrestricted',
                 'Tender_Type__c': 'Stripe',
                 'Platform_Source__c': 'MAPSi',
