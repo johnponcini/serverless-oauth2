@@ -33,6 +33,13 @@ class AdminDashboardView(AdminIndexView):
             return True
         return False
 
+    @expose('/')
+    def index(self):
+
+        return self.render(
+            'index.html',
+        )
+s
 
 def config_admin(app, db):
     admin = Admin(app, index_view=AdminDashboardView())
