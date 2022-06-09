@@ -9,18 +9,19 @@
     <!--[if lte IE 9]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
     <![endif]-->
-    {% block nav %}{% endblock %}
-    <main class="Site-content">
-      {% include '_flashes.html' %}
-      {% block content %}{% endblock %}
-    </main>
-    {% block footer %}{% endblock %}
-    {# Implement CSRF protection for site #}
-    {% if csrf_token()|safe %}
-      <div style="visibility: hidden; display: none">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token()|safe }}">
-      </div>
-    {% endif %}
+    <div id="container">
+      {% block nav %}{% endblock %}
+      <main class="Site-content">
+        {% include '_flashes.html' %}
+        {% block content %}{% endblock %}
+      </main>
+      {% block footer %}{% endblock %}
+      {# Implement CSRF protection for site #}
+      {% if csrf_token()|safe %}
+        <div style="visibility: hidden; display: none">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token()|safe }}">
+        </div>
+      {% endif %}
+    </div>
   </body>
-  <div id="container"></div>
 </html>
