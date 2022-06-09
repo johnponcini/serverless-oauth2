@@ -1,4 +1,4 @@
-#container::before {
+#background {
     background: #0f2a4a;
     overflow: hidden;
     height: 100%;
@@ -11,10 +11,9 @@
     width: 100%;
     position: relative;
     overflow: hidden;
-    filter: blur(40px) saturate(5);
 
   }
-  
+
   #container div {
     height: 60%;
     width: 60%;
