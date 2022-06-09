@@ -11,7 +11,7 @@
     "aws_environment_variables": {
       "FLASK_ENV": "development",
       "APP_NAME": "MAPS Membership",
-      "DEV_DATABASE_URL": "mysql+pymysql://admin:password@oauth-db.cswiy5vmwmww.us-west-2.rds.amazonaws.com/oauth2",
+      "DEV_DATABASE_URL": "mysql+pymysql://admin:ubQMnSvN6LHc4nQ!@oauth2.cswiy5vmwmww.us-west-2.rds.amazonaws.com/oauth2",
       "DATABASE_URL": "",
       "FLASKS3_BUCKET_NAME": "",
       "FLASKS3_URL_STYLE": "path",
