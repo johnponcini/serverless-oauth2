@@ -34,6 +34,22 @@
   color: white;
 }
 
+#submit {
+  border-radius: 40px;
+  width: 40%;
+  margin-left: 30%;
+  background: white;
+  height: 50px;
+  color: #0335c3;
+}
+
+#submit:hover {
+  height: 50px;
+  background: #0ff5;
+  border: solid 1px white;
+}
+
+
 
 @media screen and (min-width: 769px) {
   #logo img {
