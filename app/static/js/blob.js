@@ -31,11 +31,11 @@ for (var i = 0; i < blobs.length; i++) {
   });
 }
 for (var i = 0; i < blobs.length; i++) {
-  tl.to(blobs[i], time*6, {
-    rotation: "+="+3600,
-    rotationX: "+="+3600,
-    rotationY: "+="+3600,
-    rotationZ: "+="+3600,
+  tl.to(blobs[i], time*3, {
+    rotation: "+="+360,
+    rotationX: "+="+360,
+    rotationY: "+="+360,
+    rotationZ: "+="+360,
     ease: Power0.easeNone
   }, 0);
 }
