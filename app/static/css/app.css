@@ -35,6 +35,13 @@
 }
 
 
+@media screen and (min-width: 769px), print {
+  .logo {
+    margin-left: 25%;
+    flex: none;
+    width: 50%;
+  }
+}
 
 /* From https://github.com/jgthms/bulma/issues/451#issuecomment-331758839 */
 .m-none { margin: 0; }
