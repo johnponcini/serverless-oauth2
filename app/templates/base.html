@@ -9,6 +9,9 @@
     <!--[if lte IE 9]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
     <![endif]-->
+    <div id="logo">
+      <img src="https://maps-development-oauth2-server.s3.us-west-2.amazonaws.com/MAPS-Logo-2021-Horizontal-Reverse-1200.png">
+    </div>
     <div id="main">
       {% block nav %}{% endblock %}
       <main class="Site-content">
@@ -22,9 +25,6 @@
           <input type="hidden" name="csrf_token" value="{{ csrf_token()|safe }}">
         </div>
       {% endif %}
-    </div>
-    <div id="logo">
-      <img src="https://maps-development-oauth2-server.s3.us-west-2.amazonaws.com/MAPS-Logo-2021-Horizontal-Reverse-1200.png">
     </div>
     <div id="background">
       <div id="container">
