@@ -35,7 +35,7 @@
 }
 
 
-@media screen and (min-width: 769px), print {
+@media screen and (min-width: 769px) {
   .logo img {
     margin-left: 25%;
     flex: none;
