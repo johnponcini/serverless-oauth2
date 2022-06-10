@@ -15,6 +15,11 @@
   display: none;
 }
 
+.login-container {
+  border-radius: 15px;
+  background-color: white;
+}
+
 /* From https://github.com/jgthms/bulma/issues/451#issuecomment-331758839 */
 .m-none { margin: 0; }
 .p-none { padding: 0; }
