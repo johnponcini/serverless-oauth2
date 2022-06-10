@@ -45,7 +45,7 @@
 
 #submit:hover {
   height: 50px;
-  background: #0ff5;
+  background: rgba(0, 0, 0, 0.0);
   border: solid 1px white;
   color: white;
 }
