@@ -15,18 +15,18 @@
   display: none;
 }
 
-.login-container {
+.account-container {
   border-radius: 15px;
   background-color: #0ff5 !important;
   color: white;
   border: 5px solid white;
 }
 
-.login-container label {
+.account-container label {
   color: white;
 }
 
-.login-container a {
+.account-container a {
   color: white;
 }
 
