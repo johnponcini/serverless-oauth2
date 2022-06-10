@@ -2,27 +2,34 @@
 {% import 'macros/form_macros.html' as f %}
 
 {% block content %}
+<section class="section">
+  <div class="container">
+    <div class="columns mt-2">
+      <div class="column is-half is-offset-one-quarter py-2 px-2 account-container">
 
-<p>The application <strong>{{grant.client.client_name}}</strong> is requesting:
-<strong>{{ grant.request.scope }}</strong>
-</p>
+        <p>The application <strong>{{grant.client.client_name}}</strong> is requesting:
+        <strong>{{ grant.request.scope }}</strong>
+        </p>
 
-<p>
-  from You - a.k.a. <strong>{{ user.username }}</strong>
-</p>
+        <p>
+          from You - a.k.a. <strong>{{ user.username }}</strong>
+        </p>
 
-{% if not user %}
-  <p>You haven't logged in. <a href="/login">Login</a></p>
+        {% if not user %}
+        <p>You haven't logged in. <a href="/login">Login</a></p>
 
-{% else %}
+        {% else %}
 
-  {{ f.begin_form(form) }}
-    {{ f.render_form_input(form.confirm) }}
-    {{ f.render_form_field(form.submit, extra_classes="form-group mt-2") }}
-  {{ f.end_form(form) }}
+          {{ f.begin_form(form) }}
+            {{ f.render_form_input(form.confirm) }}
+            {{ f.render_form_field(form.submit, extra_classes="form-group mt-2") }}
+          {{ f.end_form(form) }}
 
-  {% endif %}
-
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
   <!-- 
 <form action="" method="post">
   <label>
