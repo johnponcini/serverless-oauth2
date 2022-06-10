@@ -1,4 +1,9 @@
 /* Custom */
+
+body {
+  font-family: Lato, sans-serif;
+} 
+
 .Site {
   display: flex;
   min-height: 100vh;
@@ -50,7 +55,9 @@
   color: white;
 }
 
-
+h1, h2, h3, h4 {
+  font-family: Poppins, sans-serif;
+}
 
 @media screen and (min-width: 769px) {
   #logo img {
@@ -59,6 +66,7 @@
     width: 50%;
   }
 }
+
 
 /* From https://github.com/jgthms/bulma/issues/451#issuecomment-331758839 */
 .m-none { margin: 0; }
