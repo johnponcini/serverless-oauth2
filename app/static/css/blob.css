@@ -23,8 +23,8 @@
   #container div {
     height: 60%;
     width: 60%;
-    background: #ff5fc7;
-    background: radial-gradient(circle, #ff514e , #00f7ff);
+    background: #9249ff;
+    background: radial-gradient(circle, #0335c3 , #00f7ff);
     opacity: 50%;
     position: absolute;
     border-radius: 50%;
