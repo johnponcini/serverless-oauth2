@@ -18,7 +18,19 @@
 .login-container {
   border-radius: 15px;
   background-color: #0ff3 !important;
+  color: white;
+  border: 5px solid white;
 }
+
+.login-container a {
+  color: white;
+}
+
+.title {
+  color: white;
+}
+
+
 
 /* From https://github.com/jgthms/bulma/issues/451#issuecomment-331758839 */
 .m-none { margin: 0; }
