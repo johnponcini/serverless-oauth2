@@ -22,6 +22,10 @@
   border: 5px solid white;
 }
 
+.login-container label {
+  color: white;
+}
+
 .login-container a {
   color: white;
 }
