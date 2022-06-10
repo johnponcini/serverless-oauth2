@@ -9,12 +9,7 @@
     <!--[if lte IE 9]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
     <![endif]-->
-    <div id="background">
-      
-    </div>
     <div id="main">
-      <div id="container">
-      </div>
       {% block nav %}{% endblock %}
       <main class="Site-content">
         {% include '_flashes.html' %}
@@ -27,6 +22,10 @@
           <input type="hidden" name="csrf_token" value="{{ csrf_token()|safe }}">
         </div>
       {% endif %}
+    </div>
+    <div id="background">
+      <div id="container">
+      </div>
     </div>
     <script>
       var blobCount = 20;

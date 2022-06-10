@@ -1,9 +1,15 @@
-#main {
+#background {
     background: #0f2a4a;
+    position: absolute;
     overflow: hidden;
     height: 100%;
     width: 100%;
     filter: blur(40px) saturate(5);
+    z-index: -1;
+  }
+
+  #main {
+      z-index: 1;
   }
 
   #container {
