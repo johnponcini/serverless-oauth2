@@ -3,7 +3,7 @@ function randy(min, max) {
 	return Math.floor(Math.random() * (1 + max - min) + min);
 }
 
-var time = 200,
+var time = 15,
     tl = new TimelineMax({repeat: -1,yoyo:false}),
     container = document.getElementById("container");
 for (var i = 0; i < blobCount; i++) {
@@ -18,8 +18,8 @@ for (var i = 0; i < blobs.length; i++) {
   init.rotX = randy(-2500,2500);
   init.rotY = randy(-2500,2500);
   init.rotZ = randy(-2500,2500);
-  init.left = randy(-40,130) + "%";
-  init.top = randy(-40,130) + "%";
+  init.left = randy(-4,13) + "%";
+  init.top = randy(-4,13) + "%";
   initSettings.push(init);
   tl.set(blobs[i], {
     rotation: init.rot,
@@ -41,31 +41,31 @@ for (var i = 0; i < blobs.length; i++) {
 }
 for (var i = 0; i < blobs.length; i++) {
   tl.to(blobs[i], time*2, {
-    left: randy(-40,130) + "%",
+    left: randy(-4,13) + "%",
     ease: Sine.easeInOut
   }, 0);
 }
 for (var i = 0; i < blobs.length; i++) {
   tl.to(blobs[i], time, {
-    top: randy(-40,130) + "%",
+    top: randy(-4,13) + "%",
     ease: Sine.easeInOut
   }, 0);
 }
 for (var i = 0; i < blobs.length; i++) {
   tl.to(blobs[i], time*2, {
-    top: randy(-40,130) + "%",
+    top: randy(-4,13) + "%",
     ease: Sine.easeInOut
   }, time);
 }
 for (var i = 0; i < blobs.length; i++) {
   tl.to(blobs[i], time*2, {
-    left: randy(-40,130) + "%",
+    left: randy(-4,13) + "%",
     ease: Sine.easeInOut
   }, time*2);
 }
 for (var i = 0; i < blobs.length; i++) {
   tl.to(blobs[i], time*2, {
-    top: randy(-40,130) + "%",
+    top: randy(-4,13) + "%",
     ease: Sine.easeInOut
   }, time*3);
 }
