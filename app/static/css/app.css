@@ -21,10 +21,12 @@ body {
 }
 
 .account-container {
-  border-radius: 15px;
+  border-radius: 30px;
   background-color: #0ff5 !important;
   color: white;
-  border: 5px solid white;
+  border: 0px solid white;
+  box-shadow: 6px 6px 56px rgba(255, 255, 255, 0.6);
+  padding: 1.5rem !important;
 }
 
 .account-container label {
