@@ -24,7 +24,7 @@
     height: 60%;
     width: 60%;
     background: #9249ff;
-    background: radial-gradient(circle at 100%, #9249ff 90%, #00f7ff 30%);
+    background: radial-gradient(circle at 100%, #9249ff 75%, #00f7ff 25%);
     opacity: 50%;
     position: absolute;
     border-radius: 50%;
