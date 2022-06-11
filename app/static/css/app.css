@@ -1,4 +1,7 @@
 /* Custom */
+html {
+  background: rgb(15, 42, 74);
+}
 
 body {
   font-family: Lato, sans-serif;
@@ -27,6 +30,7 @@ body {
   border: 2px solid rgba(255, 255, 255, 0.8);
   box-shadow: 6px 6px 56px rgba(255, 255, 255, 0.6);
   padding: 1.5rem !important;
+  margin-bottom: 50px;
 }
 
 .account-container label {
