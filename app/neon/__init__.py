@@ -3,11 +3,16 @@ from nameparser import HumanName
 from datetime import datetime, timedelta
 from iso3166 import countries
 
-from app.neoncrm import NEON
+import stripe
+
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
+
+from app.neoncrm import NEON, util
 
 neon = NEON('maps', os.getenv('NEON_KEY'))
 
-from __init__ import stripe, neon, util, COUNTRIES, STATES
+COUNTRIES = neon_countries = neon.properties.get_countries().json()
+STATES = neon.properties.get_stateProvinces().json()
 
 
 class Account:
