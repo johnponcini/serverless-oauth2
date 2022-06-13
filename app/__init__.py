@@ -33,6 +33,10 @@ def create_app(config_name="development"):
 
     app.register_blueprint(account_blueprint, url_prefix="/account")
 
+    from .payment import payment as payment_blueprint
+
+    app.register_blueprint(payment_blueprint, url_prefix="/payment")
+
     # Admin
     from .admin import sfadmin as admin_blueprint
 
