@@ -1,6 +1,6 @@
 """NeonCRM API V2 Python Client"""
 
-from neoncrm import util
+from app.neoncrm import util
 
 
 class BaseComponent(util.API):

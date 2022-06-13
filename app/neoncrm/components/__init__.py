@@ -1,7 +1,7 @@
 """NeonCRM API Python Client Components"""
 
 
-from . import (
+from app.neoncrm.components import (
     accounts,
     addresses,
     campaigns,

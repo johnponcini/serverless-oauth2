@@ -1,7 +1,7 @@
 """NeonCRM API v2 Python Client"""
 
-from neoncrm import util
-from neoncrm.components import base
+from app.neoncrm import util
+from app.neoncrm.components import base
 
 
 class Donations(base.BaseComponent):

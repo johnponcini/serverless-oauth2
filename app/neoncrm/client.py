@@ -1,4 +1,4 @@
-from neoncrm import components, util
+from app.neoncrm import components, util
 
 
 class NEON(util.API):
