@@ -34,6 +34,7 @@ kappa==0.6.0
 Mako==1.2.0
 MarkupSafe==2.1.1
 mypy-extensions==0.4.3
+nameparser==1.0.6
 pathspec==0.9.0
 placebo==0.9.0
 platformdirs==2.5.1
