@@ -22,7 +22,7 @@ class BaseComponent(util.API):
         # Create an HTTP Authorization Header
         self.headers = {
             "Authorization" : "Basic basic_auth_token",
-            "NEON-API-VERSION" : "2.1"
+            "NEON-API-VERSION" : "2.4"
         }
 
     def get_request(
