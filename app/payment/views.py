@@ -7,6 +7,8 @@ from flask_login import current_user, login_required
 
 import stripe
 
+from config import csrf
+
 from app.neon import Account, Address, Donation, neon
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
@@ -25,6 +27,7 @@ def get_config():
 
 
 @payment.route('/create-customer', methods=['POST'])
+@csrf.exempt
 def create_customer():
     # Reads paymentlication/json and returns a response
     data = json.loads(request.data)
@@ -56,6 +59,7 @@ def create_customer():
 
 
 @payment.route('/create-payment-intent', methods=['POST'])
+@csrf.exempt
 def create_payment():
     data = json.loads(request.data)
 
@@ -110,6 +114,7 @@ def create_payment():
 
 
 @payment.route('/create-subscription', methods=['POST'])
+@csrf.exempt
 def create_subscription():
     data = json.loads(request.data)
     data['items'][0]['price_data']['unit_amount'] = int(data['items'][0]['price_data']['unit_amount']) * 100
@@ -130,6 +135,7 @@ def create_subscription():
         return jsonify({'error': {'message': str(e)}}), 400
 
 @payment.route('/update-donation', methods=['POST'])
+@csrf.exempt
 def update_donation():
     data = json.loads(request.data)
 
@@ -170,6 +176,7 @@ def update_donation():
 
 
 @payment.route('/create-checkout-session', methods=['POST'])
+@csrf.exempt
 def create_checkout_session():
     data = json.loads(request.data)
 
@@ -218,6 +225,7 @@ def create_checkout_session():
         return jsonify({'error': {'message': str(e)}}), 400
 
 @payment.route('/update-user-premiums', methods=['POST'])
+@csrf.exempt
 def update_user_premiums():
     data = json.loads(request.data)
 
@@ -273,6 +281,7 @@ def receive_every_webhook():
 
 
 @payment.route('/webhook', methods=['POST'])
+@csrf.exempt
 def webhook_received():
     # You can use webhooks to receive information about asynchronous payment events.
     # For more about our webhook events check out https://stripe.com/docs/webhooks.
