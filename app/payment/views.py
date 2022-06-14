@@ -41,7 +41,10 @@ def create_customer():
 
     try:
         # Create a new customer object
-        customer = stripe.Customer.create(**data)
+        customer = stripe.Customer.create(
+            **data, 
+            test_clock=os.getenv('STRIPE_TEST_CLOCK_ID')
+        )
 
         # At this point, associate the ID of the Customer object with your
         # own internal representation of a customer, if you have one.

@@ -26,7 +26,8 @@
       "NEON_KEY": "aeda975d31269651882582137691df14",
       "STRIPE_PUBLISHABLE_KEY": "pk_test_c8mycirl26LDY3bR5aUe2mQI00mCYFkXAv",
       "STRIPE_SECRET_KEY": "sk_test_0J15YgRZazmzvKAjpGukNHWg00PXu2OEkn",
-      "STRIPE_PRODUCT_ID": "prod_JwCRtGdq0IeCS9"
+      "STRIPE_PRODUCT_ID": "prod_JwCRtGdq0IeCS9",
+      "STRIPE_TEST_CLOCK_ID" : "clock_1LAgh8KUVYXXXzNDu4o9rXex"
     }
   },
   "development": {
