@@ -1,5 +1,6 @@
 import os
 
+from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf import CSRFProtect
 from flask_login import LoginManager
@@ -75,6 +76,7 @@ class Config:
         csrf.init_app(app)
         s3.init_app(app)
         Migrate(app, db)
+        CORS(app)
         authorize.init_app(app)
 
 
