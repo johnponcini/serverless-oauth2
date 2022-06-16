@@ -36,7 +36,6 @@ def create_customer():
     email = data['email']
     name = data['name']
     address = data['address']
-    phone = data['phone']
     metadata = data['metadata']
     donation_page = metadata['donation_page']
     method = metadata['method'] 
@@ -54,7 +53,7 @@ def create_customer():
         # own internal representation of a customer, if you have one.
         Account(email, name, method, origin)
 
-        Contact(email, name, address, phone)
+        Contact(email, name, address)
 
         
 

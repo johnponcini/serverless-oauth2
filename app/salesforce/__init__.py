@@ -13,13 +13,13 @@ sf = Salesforce(instance_url="https://maps501c3--arkustest.lightning.force.com",
 
 class Contact:
 
-    def __init__(self, email, name, address, phone):
+    def __init__(self, email, name, address):
         '''
         '''
         self.id = self.search(email)
 
         if not self.id:
-            self.create(email, HumanName(name), address, phone)
+            self.create(email, HumanName(name), address)
 
 
     def search(self, email):
@@ -32,7 +32,7 @@ class Contact:
             return query['records'][-1]['Id']
 
 
-    def create(self, email, name, address, phone):
+    def create(self, email, name, address):
         first_name = name.first.capitalize()
         last_name = name.last.capitalize()
 
@@ -52,8 +52,7 @@ class Contact:
                 'MailingCountry' : address['country'], 
                 'MailingStreet' : address['line1'],
                 'MailingStreet2' : address['line2'],
-                'MailingPostalCode' : address['postal_code'],
-                'Phone' : phone
+                'MailingPostalCode' : address['postal_code']
             }
         )
 
