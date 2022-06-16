@@ -7,6 +7,8 @@ from flask_login import current_user, login_required
 
 import stripe
 
+from app.salesforce import Contact, Opportunity
+
 from config import csrf
 
 from app.neon import Account, Address, Donation, neon
@@ -33,6 +35,8 @@ def create_customer():
     data = json.loads(request.data)
     email = data['email']
     name = data['name']
+    address = data['address']
+    phone = data['phone']
     metadata = data['metadata']
     donation_page = metadata['donation_page']
     method = metadata['method'] 
@@ -49,6 +53,10 @@ def create_customer():
         # At this point, associate the ID of the Customer object with your
         # own internal representation of a customer, if you have one.
         Account(email, name, method, origin)
+
+        Contact(email, name, address, phone)
+
+        
 
         response = jsonify(customer=customer)
 
@@ -152,6 +160,8 @@ def update_donation():
     referrer = data['referrer']
     source = 'Stripe Checkout'
 
+    email = stripe.Customer.retrieve(customer)['email']
+
     recurring = data.get('recurring')
     if recurring == 'one-time':
         recurring = False
@@ -171,6 +181,8 @@ def update_donation():
             source, page=page, recurring=recurring, referrer=referrer
         )
         donation.update()
+
+        Opportunity(email, amount)
 
         return jsonify({'success':True}), 200
 
