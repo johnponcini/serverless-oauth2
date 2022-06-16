@@ -7,7 +7,8 @@ import stripe
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
-from app.neoncrm import NEON, util
+from app.neoncrm import NEON
+from app.neon import util
 
 neon = NEON('maps', os.getenv('NEON_KEY'))
 
