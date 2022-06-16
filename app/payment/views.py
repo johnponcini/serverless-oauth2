@@ -158,7 +158,8 @@ def update_donation():
     referrer = data['referrer']
     source = 'Stripe Checkout'
 
-    email = stripe.Customer.retrieve(customer)['email']
+    customer_obj = stripe.Customer.retrieve(customer)
+    email = customer_obj.email
 
     recurring = data.get('recurring')
     if recurring == 'one-time':
