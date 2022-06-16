@@ -51,7 +51,6 @@ class Contact:
                 'MailingCity' : address['city'],
                 'MailingCountry' : address['country'], 
                 'MailingStreet' : address['line1'],
-                'MailingStreet2' : address['line2'],
                 'MailingPostalCode' : address['postal_code']
             }
         )
