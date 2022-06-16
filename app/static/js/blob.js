@@ -3,7 +3,7 @@ function randy(min, max) {
 	return Math.floor(Math.random() * (1 + max - min) + min);
 }
 
-var time = 2000,
+var time = 2,
     tl = new TimelineMax({repeat: -1,yoyo:false}),
     container = document.getElementById("container");
 for (var i = 0; i < blobCount; i++) {
