@@ -1,17 +1,16 @@
 import os
 import json
+import stripe
 
 from flask import Blueprint, request, session, url_for
 from flask import render_template, redirect, jsonify
 from flask_login import current_user, login_required
 
-import stripe
+from config import csrf
 
 from app.salesforce import Contact, Opportunity
 
-from config import csrf
-
-from app.neon import Account, Address, Donation, neon
+from app.neon import Account, Donation
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
@@ -42,17 +41,25 @@ def create_customer():
     redirect = metadata.get('redirect')
     origin = 'Stripe Donation Module'
 
+    query = stripe.Customer.search(query="email:'{}'".format(email))
+
+
     try:
-        # Create a new customer object
-        customer = stripe.Customer.create(
-            **data, 
-        )
+        if len(query.data) > 0:
 
-        # At this point, associate the ID of the Customer object with your
-        # own internal representation of a customer, if you have one.
-        Account(email, name, method, origin)
+            customer = stripe.Customer.retrieve(query.data[0].id) 
 
-        Contact(email, name, address)
+        else:
+            # Create a new customer objec
+            customer = stripe.Customer.create(
+                **data, 
+            )
+
+            # At this point, associate the ID of the Customer object with your
+            # own internal representation of a customer, if you have one.
+            Account(email, name, method, origin)
+
+            Contact(email, name, address)
 
         
 
