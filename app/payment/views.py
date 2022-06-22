@@ -155,42 +155,13 @@ def create_subscription():
 def update_donation():
     data = json.loads(request.data)
 
-    # Create a new donation in NEON
-    charge = data['payment_intent']
-    amount = data['amount']
-    customer = data['customer']
-    allocation = data['allocation']
-    campaign = data['campaign']
-    method = data['method']
-    referrer = data['referrer']
-    source = 'Stripe Checkout'
-
-    customer_obj = stripe.Customer.retrieve(customer)
-    email = customer_obj.email
-
-    recurring = data.get('recurring')
-    if recurring == 'one-time':
-        recurring = False
-        fund = {'id' : 1}
-    else: 
-        fund = {'id' : 19}
-    
-    redirect = data.get('redirect')
-    if redirect:
-        page = "www.maps.org/" + redirect
-    else:
-        page = data['donation_page']
-        
     try:
-        donation = Donation(
-            allocation, amount, campaign, charge, customer, fund, method,
-            source, page=page, recurring=recurring, referrer=referrer
-        )
-        donation.update()
+        payment = stripe.PaymentIntent.retrieve(data['payment_intent'])
+        if payment['status'] == 'succeded':
+            return jsonify({'success':True}), 200
+        else:
+            return jsonify({'error': {'message': 'Payment could not be completed. Please try again another time.'}}), 400
 
-        Opportunity(email, amount)
-
-        return jsonify({'success':True}), 200
 
     except Exception as e:
         return jsonify({'error': {'message': str(e)}}), 400
@@ -276,6 +247,10 @@ def update_user_premiums():
         return jsonify({'error': {'message': str(e)}}), 400
 
 
+#@payment.route('/subscriptions', methods=['GET'])
+#def get_subscriptions():
+
+
 @payment.route('/customer-portal', methods=['POST'])
 def customer_portal():
     data = json.loads(request.data)
@@ -325,6 +300,10 @@ def webhook_received():
         event_type = request_data['type']
     data_object = data['object']
 
+    # New customer
+    #if event_type == 'customer.created':
+        
+    # Invoice Payment Success
     if event_type == 'invoice.payment_succeeded':
         if data_object['billing_reason'] == 'subscription_create':
             subscription_id = data_object['subscription']
@@ -336,5 +315,48 @@ def webhook_received():
                 subscription_id,
                 default_payment_method=payment_intent.payment_method
             )
+
+    if event_type == 'payment_intent.succeded':
+        charge = data_object['charges']['data'][0]['id']
+        stripe.Charge.modify(charge, metadata=data_object['metadata'])
+
+    if event_type == 'charge.succeeded':
+        try:
+            allocation = data_object['metadata']['allocation']
+            amount = data_object['amount']
+            campaign = data_object['metadata']['allocation']
+            charge = data_object['id']
+            customer = data_object['customer']
+            method = data_object['metadata']['method']
+            source = 'Stripe Checkout'
+            referrer = data_object['metadata'].get('referrer')
+            if data_object.get('invoice'):
+                fund = {'id' : 19}
+                recurring = 'monthly'
+            else:
+                fund = {'id' : 1}
+            
+            redirect = data_object['metadata'].get('redirect')
+            if redirect:
+                page = "www.maps.org/" + redirect
+            else:
+                page = data_object['metadata']['donation_page']
+
+            donation = Donation(
+                allocation, amount, campaign, charge, customer, fund, method,
+                source, page=page, recurring=recurring, referrer=referrer
+            )
+            donation.update()
+
+            customer_obj = stripe.Customer.retrieve(customer)
+            email = customer_obj.email
+
+            Opportunity(email, amount)
+
+            return jsonify({'success':True}), 200
+
+        except Exception as e:
+            return jsonify({'error': {'message': str(e)}}), 400
+        
 
     return jsonify(success=True)
