@@ -335,7 +335,8 @@ def webhook_received():
                 recurring = 'monthly'
             else:
                 fund = {'id' : 1}
-            
+                recurring = None
+                
             redirect = data_object['metadata'].get('redirect')
             if redirect:
                 page = "www.maps.org/" + redirect
