@@ -323,7 +323,7 @@ def webhook_received():
     if event_type == 'charge.succeeded':
         try:
             allocation = data_object['metadata']['allocation']
-            amount = int(data['amount']) / 100
+            amount = int(data_object['amount']) / 100
             campaign = data_object['metadata']['allocation']
             charge = data_object['id']
             customer = data_object['customer']
