@@ -323,7 +323,7 @@ def webhook_received():
     if event_type == 'charge.succeeded':
         try:
             allocation = data_object['metadata']['allocation']
-            amount = data_object['amount']
+            amount = int(data['amount']) / 100
             campaign = data_object['metadata']['allocation']
             charge = data_object['id']
             customer = data_object['customer']
@@ -336,7 +336,7 @@ def webhook_received():
             else:
                 fund = {'id' : 1}
                 recurring = None
-                
+
             redirect = data_object['metadata'].get('redirect')
             if redirect:
                 page = "www.maps.org/" + redirect
@@ -353,8 +353,6 @@ def webhook_received():
             email = customer_obj.email
 
             Opportunity(email, amount)
-
-            return jsonify({'success':True}), 200
 
         except Exception as e:
             return jsonify({'error': {'message': str(e)}}), 400
