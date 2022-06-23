@@ -1,5 +1,4 @@
 #background {
-    background: #0f2a4a;
     position: absolute;
     overflow: hidden;
     height: 110%;
@@ -13,12 +12,17 @@
   }
 
   #container {
-    height: 100%;
-    width: 100%;
-    position: relative;
+    height: calc(89% + 2px);
+    width: calc(52% + 1px);
+    position: absolute;
     overflow: hidden;
-
+    margin-left: calc(25% + 2px);
+    top: -2px;
+    border-radius: 10px;
+    background: #0f2a4a;
+    z-index: -1;
   }
+
 
   #container div {
     height: 60%;
