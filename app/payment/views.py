@@ -294,7 +294,7 @@ def webhook_received():
 
             note = 'Payment method attached to subscription'
 
-    if event_type == 'payment_intent.succeded':
+    if event_type == 'payment_intent.succeeded':
         try:
             charge = data_object['charges']['data'][0]['id']
             stripe.Charge.modify(charge, metadata=data_object['metadata'])
