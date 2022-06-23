@@ -5,36 +5,42 @@
 <section class="section">
   <div class="container">
     <div class="columns mt-2">
-      <div class="column is-half is-offset-one-quarter py-2 px-2 account-container">
-        <h2 class="title has-text-centered">Log in</h2>
-        {% set flashes = {
-          'danger':   get_flashed_messages(category_filter=['form-danger']),
-          'warning': get_flashed_messages(category_filter=['form-check-email']),
-          'info':    get_flashed_messages(category_filter=['form-info']),
-          'success': get_flashed_messages(category_filter=['form-success'])
-        } %}
-        {{ f.begin_form(form, flashes) }}
-          {{ f.render_form_field(form.email) }}
-          {{ f.render_form_field(form.password) }}
-          <div class="columns">
-            <div class="column is-narrow has-text-left">
-              {{ f.render_form_input(form.remember_me) }}
+      <div class="background"></div>
+        <div id="container">
+        </div>
+        <div class="column is-half is-offset-one-quarter py-2 px-2 account-container">
+          <h2 class="title has-text-centered">Log in</h2>
+          {% set flashes = {
+            'danger':   get_flashed_messages(category_filter=['form-danger']),
+            'warning': get_flashed_messages(category_filter=['form-check-email']),
+            'info':    get_flashed_messages(category_filter=['form-info']),
+            'success': get_flashed_messages(category_filter=['form-success'])
+          } %}
+          {{ f.begin_form(form, flashes) }}
+            {{ f.render_form_field(form.email) }}
+            {{ f.render_form_field(form.password) }}
+            <div class="columns">
+              <div class="column is-narrow has-text-left">
+                {{ f.render_form_input(form.remember_me) }}
+              </div>
+              <div class="column is-expanded has-text-right">
+                <a href="{{ url_for('account.reset_password_request') }}">Forgot password?</a>
+              </div>
+              <div class="column is-expanded has-text-right">
+                <a href="{{ url_for('account.register') }}">Register a new account</a>
+              </div>
             </div>
-            <div class="column is-expanded has-text-right">
-              <a href="{{ url_for('account.reset_password_request') }}">Forgot password?</a>
-            </div>
-            <div class="column is-expanded has-text-right">
-              <a href="{{ url_for('account.register') }}">Register a new account</a>
-            </div>
-          </div>
-          {{ f.form_message(flashes['danger'], header='Something went wrong.', class='danger') }}
-          {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
-          {{ f.form_message(flashes['info'], header='Information', class='info') }}
-          {{ f.form_message(flashes['success'], header='Success!', class='success') }}
-          {{ f.render_form_field(form.submit, extra_classes="form-group mt-2") }}
-        {{ f.end_form(form) }}
+            {{ f.form_message(flashes['danger'], header='Something went wrong.', class='danger') }}
+            {{ f.form_message(flashes['warning'], header='Check your email.', class='warning') }}
+            {{ f.form_message(flashes['info'], header='Information', class='info') }}
+            {{ f.form_message(flashes['success'], header='Success!', class='success') }}
+            {{ f.render_form_field(form.submit, extra_classes="form-group mt-2") }}
+          {{ f.end_form(form) }}
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+
 {% endblock %}
