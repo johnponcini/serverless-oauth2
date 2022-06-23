@@ -1,35 +1,51 @@
 #background {
-    position: absolute;
-    overflow: hidden;
-    height: calc(89% + 2px);
-    width: calc(52% + 1px);
-    z-index: -1;
-  }
+  position: absolute;
+  overflow: hidden;
+  height: calc(89% + 7px);
+  width: calc(50% + 18px);
+  z-index: -1;
+  margin-left: calc(25% + 3px);
+  top: -3px;
+  border-radius: 33px;
+}
 
-  #main {
-      z-index: 1;
-  }
+#main {
+    z-index: 1;
+}
 
-  #container {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    overflow: hidden;
-    margin-left: calc(25% + 2px);
-    top: -2px;
-    border-radius: 10px;
-    background: #0f2a4a;
-    filter: blur(80px) saturate(5);
-    z-index: -1;
-  }
+#container {
+  height: 200%;
+  width: 200%;
+  position: absolute;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #0f2a4a;
+  filter: blur(80px) saturate(5);
+  z-index: -1;
+  top: -50%;
+  left: -50%;
+}
 
 
-  #container div {
-    height: 60%;
-    width: 60%;
-    background: #9249ff;
-    background: radial-gradient(circle at 100%, #9249ff 75%, #00f7ff 25%);
-    opacity: 50%;
-    position: absolute;
-    border-radius: 50%;
+#container div {
+  height: 60%;
+  width: 60%;
+  background: #9249ff;
+  background: radial-gradient(circle at 100%, #9249ff 75%, #00f7ff 25%);
+  opacity: 50%;
+  position: absolute;
+  border-radius: 50%;
+}
+
+@media screen and (min-width: 769px) {
+  #background {
+    height: calc(89% + 5px);
   }
+}
+
+@media screen and (min-width: 769px) {
+  #background {
+    height: calc(%100);
+    width: calc(%100);
+  }
+}
