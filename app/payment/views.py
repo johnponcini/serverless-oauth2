@@ -32,37 +32,13 @@ def get_config():
 def create_customer():
     # Reads paymentlication/json and returns a response
     data = json.loads(request.data)
-    email = data['email']
-    name = data['name']
-    address = data['address']
-    metadata = data['metadata']
-    donation_page = metadata['donation_page']
-    method = metadata['method'] 
-    redirect = metadata.get('redirect')
-    origin = 'Stripe Donation Module'
-
-    query = stripe.Customer.search(query="email:'{}'".format(email))
-
-
     try:
-        if len(query.data) > 0:
-
-            customer = stripe.Customer.retrieve(query.data[0].id) 
-
+        q = stripe.Customer.search(query="email:'{}'".format(data['email']))
+        if len(q.data) > 0:
+            customer = stripe.Customer.retrieve(q.data[0].id) 
         else:
-            # Create a new customer objec
-            customer = stripe.Customer.create(
-                **data, 
-            )
-
-            # At this point, associate the ID of the Customer object with your
-            # own internal representation of a customer, if you have one.
-            Account(email, name, method, origin)
-
-            Contact(email, name, address)
-
-        
-
+            # Create a new customer object
+            customer = stripe.Customer.create(**data)
         response = jsonify(customer=customer)
 
         # We're simulating authentication here by storing the ID of the customer
@@ -251,22 +227,6 @@ def update_user_premiums():
 #def get_subscriptions():
 
 
-@payment.route('/customer-portal', methods=['POST'])
-def customer_portal():
-    data = json.loads(request.data)
-    # For demonstration purposes, we're using the Checkout session to retrieve the customer ID. 
-    # Typically this is stored alongside the authenticated user in your database. 
-    customer = data['customer']
-
-    # This is the URL to which the customer will be redirected after they are
-    # done managing their billing with the portal.
-    return_url = "https://joomla.devdelic.org/"
-
-    session = stripe.billing_portal.Session.create(
-        customer=customer.id,
-        return_url=return_url)
-    return jsonify({'url': session.url})
-
 
 @payment.route('/every_webhook', methods=['POST'])
 def receive_every_webhook():
@@ -301,7 +261,16 @@ def webhook_received():
     data_object = data['object']
 
     # New customer
-    #if event_type == 'customer.created':
+    if event_type == 'customer.created':
+        email = data_object['email']
+        name = data_object['name']
+        method = data_object['metadata']['method']
+        origin = 'Stripe Donation Module'
+        address = data_object['address']
+
+        Account(email, name, method, origin)
+
+        Contact(email, name, address)
         
     # Invoice Payment Success
     if event_type == 'invoice.payment_succeeded':
@@ -316,9 +285,12 @@ def webhook_received():
                 default_payment_method=payment_intent.payment_method
             )
 
+            note = 'Payment method attached to subscription'
+
     if event_type == 'payment_intent.succeded':
         charge = data_object['charges']['data'][0]['id']
         stripe.Charge.modify(charge, metadata=data_object['metadata'])
+        note = 'Metadata applied to charge'
 
     if event_type == 'charge.succeeded':
         try:
@@ -354,8 +326,10 @@ def webhook_received():
 
             Opportunity(email, amount)
 
+            note = 'Donation successfully imported to the CRM'
+
         except Exception as e:
             return jsonify({'error': {'message': str(e)}}), 400
         
 
-    return jsonify(success=True)
+    return jsonify(success=True, note=note)
