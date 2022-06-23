@@ -309,7 +309,7 @@ def webhook_received():
             amount = int(data_object['amount']) / 100
             campaign = data_object['metadata']['allocation']
             charge = data_object['id']
-            customer = data_object['customer']
+            customer = stripe.Customer.retrieve(data_object['customer'])
             method = data_object['metadata']['method']
             source = 'Stripe Checkout'
             referrer = data_object['metadata'].get('referrer')
@@ -332,8 +332,7 @@ def webhook_received():
             )
             donation.update()
 
-            customer_obj = stripe.Customer.retrieve(customer)
-            email = customer_obj.email
+            email = customer['email']
 
             Opportunity(email, amount)
 

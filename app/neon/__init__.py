@@ -220,7 +220,7 @@ class Donation:
     ):
         '''
         '''
-        self.customer = stripe.Customer.retrieve(customer)
+        self.customer = customer
 
         self.account_id = self.get_account_id(self.customer['email'])
         self.acknowledgee = {
