@@ -271,6 +271,8 @@ def webhook_received():
         Account(email, name, method, origin)
 
         Contact(email, name, address)
+
+        note = email + " has created an account and is in the CRM"
         
     # Invoice Payment Success
     if event_type == 'invoice.payment_succeeded':
