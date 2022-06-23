@@ -1,9 +1,8 @@
 #background {
     position: absolute;
     overflow: hidden;
-    height: 110%;
-    width: 100%;
-    filter: blur(80px) saturate(5);
+    height: calc(89% + 2px);
+    width: calc(52% + 1px);
     z-index: -1;
   }
 
@@ -12,14 +11,15 @@
   }
 
   #container {
-    height: calc(89% + 2px);
-    width: calc(52% + 1px);
+    height: 100%;
+    width: 100%;
     position: absolute;
     overflow: hidden;
     margin-left: calc(25% + 2px);
     top: -2px;
     border-radius: 10px;
     background: #0f2a4a;
+    filter: blur(80px) saturate(5);
     z-index: -1;
   }
 
