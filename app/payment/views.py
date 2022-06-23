@@ -133,7 +133,7 @@ def update_donation():
 
     try:
         payment = stripe.PaymentIntent.retrieve(data['payment_intent'])
-        if payment['status'] == 'succeded':
+        if payment['status'] == 'succeeded':
             return jsonify({'success':True}), 200
         else:
             return jsonify({'error': {'message': 'Payment could not be completed. Please try again another time.'}}), 400
