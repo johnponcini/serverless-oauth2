@@ -262,18 +262,23 @@ def webhook_received():
 
     # New customer
     if event_type == 'customer.created':
-        email = data_object['email']
-        name = data_object['name']
-        method = data_object['metadata']['method']
-        origin = 'Stripe Donation Module'
-        address = data_object['address']
+        try:
+            email = data_object['email']
+            name = data_object['name']
+            method = data_object['metadata']['method']
+            origin = 'Stripe Donation Module'
+            address = data_object['address']
 
-        Account(email, name, method, origin)
+            Account(email, name, method, origin)
 
-        Contact(email, name, address)
+            Contact(email, name, address)
 
-        note = email + " has created an account and is in the CRM"
+            note = email + " has created an account and is in the CRM"
+
+        except Exception as e:
+            return jsonify({'error': {'message': str(e)}}), 400
         
+
     # Invoice Payment Success
     if event_type == 'invoice.payment_succeeded':
         if data_object['billing_reason'] == 'subscription_create':
@@ -290,10 +295,14 @@ def webhook_received():
             note = 'Payment method attached to subscription'
 
     if event_type == 'payment_intent.succeded':
-        charge = data_object['charges']['data'][0]['id']
-        stripe.Charge.modify(charge, metadata=data_object['metadata'])
-        note = 'Metadata applied to charge'
+        try:
+            charge = data_object['charges']['data'][0]['id']
+            stripe.Charge.modify(charge, metadata=data_object['metadata'])
+            note = 'Metadata applied to charge'
 
+        except Exception as e:
+            return jsonify({'error': {'message': str(e)}}), 400
+        
     if event_type == 'charge.succeeded':
         try:
             allocation = data_object['metadata']['allocation']
