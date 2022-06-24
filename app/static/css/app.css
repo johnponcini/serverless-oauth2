@@ -85,12 +85,6 @@ h1, h2, h3, h4 {
   padding: 20px 50px 0px 50px;
 }
 
-#logo img {
-  margin-left: 30%;
-  width: 40%;
-}
-
-
 @media screen and (min-width: 769px) {
   #logo img {
     margin-left: 40%;
@@ -99,6 +93,10 @@ h1, h2, h3, h4 {
   }
 }
 
+#logo img {
+  margin-left: 30%;
+  width: 40%;
+}
 
 /* From https://github.com/jgthms/bulma/issues/451#issuecomment-331758839 */
 .m-none { margin: 0; }

@@ -94,7 +94,15 @@ def home():
     else:
         admin = False
 
-    return render_template("home.html", user=user, clients=clients, portal_url=session.get('portal'), subscriptions=subscriptions, donations=donations, admin=admin)
+    return render_template(
+        "home.html", 
+        user=user, 
+        clients=clients, 
+        portal_url=session.get('portal'), 
+        subscriptions=subscriptions, 
+        donations=donations, 
+        admin=admin
+    )
 
 """
 @main.route("/logout")
