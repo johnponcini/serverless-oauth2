@@ -37,13 +37,13 @@
   border-radius: 50%;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 902px) {
   #background {
     height: calc(90% + 8px);
   }
 }
 
-@media screen and (max-width: 769px) {
+@media screen and (max-width: 768px) {
   #background {
     height: calc(100% + 6px);
     width: calc(100% + 30px);
