@@ -37,7 +37,7 @@
   border-radius: 50%;
 }
 
-@media screen and (max-width: 912px) {
+@media screen and (max-width: 921px) {
   #background {
     height: calc(90% + 8px);
   }
@@ -49,5 +49,10 @@
     width: calc(100% + 30px);
     margin-left: 0px;
     left: -15px;
+  }
+
+  #container {
+    height: calc(200% + 50px);
+    width: calc(200% + 50px);
   }
 }
