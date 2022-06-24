@@ -1,7 +1,7 @@
 #background {
   position: absolute;
   overflow: hidden;
-  height: calc(89% + 5px);
+  height: calc(90% + 6px);
   width: calc(50% + 18px);
   z-index: -1;
   margin-left: calc(25% + 3px);
@@ -37,9 +37,9 @@
   border-radius: 50%;
 }
 
-@media screen and (max-width: 865px) {
+@media screen and (max-width: 890px) {
   #background {
-    height: calc(89% + 7px);
+    height: calc(90% + 8px);
   }
 }
 
