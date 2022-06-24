@@ -25,24 +25,23 @@ body {
 
 .account-container {
   border-radius: 30px;
-  background-color: #0ff5 !important;
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.8);
+  background-color: white !important;
+  color: #0335c3;
   box-shadow: 6px 6px 56px rgba(255, 255, 255, 0.6);
   padding: 1.5rem !important;
   margin-bottom: 50px;
 }
 
 .account-container label {
-  color: white;
+  color: #0335c3;
 }
 
 .account-container a {
-  color: white;
+  color: #0335c3;
 }
 
 .title {
-  color: white;
+  color: #0335c3;
 }
 
 #submit {
