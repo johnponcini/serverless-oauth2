@@ -64,11 +64,15 @@ h1, h2, h3, h4 {
   font-family: Poppins, sans-serif;
 }
 
+#logo {
+  padding: 20px 50px 20px 50px;
+}
+
 @media screen and (min-width: 769px) {
   #logo img {
-    margin-left: 25%;
+    margin-left: 35%;
     flex: none;
-    width: 50%;
+    width: 30%;
   }
 }
 
