@@ -59,7 +59,7 @@ class Opportunity:
     '''
     A container to define donations and associated donation functions.
     '''
-    def __init__(self, email, amount):
+    def __init__(self, email, amount, tender_type, source, page, charge_id, recurring=None):
         '''
         '''
         
@@ -69,6 +69,9 @@ class Opportunity:
 
         account_id = contact['AccountId']
 
+        if recurring:
+            pass
+
         sf.Opportunity.create(
             {
                 'AccountId': account_id,
@@ -76,11 +79,50 @@ class Opportunity:
                 'Name': 'API Test',
                 'Type': 'Donation',
                 'StageName': 'Posted',
-                'closedate': datetime.now().strftime('%Y-%m-%d'),
+                'CloseDate': datetime.now().strftime('%Y-%m-%d'),
                 'CampaignId': '7012f000000bOFfAAM',
                 'Purpose__c': 'Unrestricted',
-                'Tender_Type__c': 'Stripe',
-                'Platform_Source__c': 'MAPSi',
-                'Donation_Page__c': 'Test Page'
+                'Tender_Type__c': tender_type,
+                'Platform_Source__c': source,
+                'Donation_Page__c': page,
+                'Stripe_Charge_ID__c' : charge_id
             }
         )
+    
+
+class Recurring_Donation:
+    '''
+    A container to define recurring donations and associated functions.
+    '''
+    def __init__(self, email, amount, card, recurring):
+
+        contact_id = sf.query("SELECT Id From Contact WHERE Email = '{}'".format(email))['records'][-1]['Id']
+        contact = sf.Contact.get(contact_id)
+        account_id = contact['AccountId']
+
+        exp_month = card['exp_month']
+        exp_year = card['exp_year']
+        card_last_4 = card['last4']
+        
+        if recurring == 'month':
+            recurring = 'Monthly'
+        elif recurring == 'year':
+            recurring = 'Yearly'
+
+        self.recurring_donation = sf.npe03__Recurring_Donation__c.create(
+            {
+                'npe03__Organization__c': account_id,
+                'npe03__Amount__c': amount,
+                'Name': 'API Test',
+                'npsp__InstallmentFrequency__c': 1,
+                'npe03__Installment_Period__c': recurring,
+                'npsp__PaymentMethod__c': 'Credit Card',
+                'npe03__Recurring_Donation_Campaign': '7012f000000bOFfAAM',
+                'npsp__CardExpirationMonth__c': exp_month,
+                'npsp__CardExpirationYear__c': exp_year,
+                'npsp__CardLast4__c': card_last_4
+            }
+        )
+
+    def id(self):
+        return self.recurring_donation

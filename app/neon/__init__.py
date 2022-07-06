@@ -263,7 +263,7 @@ class Donation:
         recurring = kwargs.get('recurring')
         if recurring:
             custom_fields.append(self.format_field('358', 'YES'))
-            if recurring == 'monthly':
+            if recurring == 'Monthly':
                 custom_fields.append(self.format_field('321', '1040', True))
             else:
                 custom_fields.append(self.format_field('321', '1095', True))

@@ -8,7 +8,7 @@ from flask_login import current_user, login_required
 
 from config import csrf
 
-from app.salesforce import Contact, Opportunity
+from app.salesforce import Contact, Opportunity, Recurring_Donation
 
 from app.neon import Account, Donation
 
@@ -230,8 +230,15 @@ def update_user_premiums():
 
 @payment.route('/every_webhook', methods=['POST'])
 def receive_every_webhook():
-    webhook_secret = os.getenv('')
+    webhook_secret = os.getenv('EVERY_ORG_WEBHOOK_SECRET')
     request_data = json.loads(request.data)
+
+    charge_id = request_data['chargeId']
+    partnerDonation_id = request_data['partnerDonationId']
+    first_name = request_data['firstNmae']
+    last_name = request_data['lastName']
+    email = request_data['email']
+    
     # Request a shared secret from every.org to decrypt incoming data stream
     pass
 
@@ -283,13 +290,22 @@ def webhook_received():
     if event_type == 'invoice.payment_succeeded':
         if data_object['billing_reason'] == 'subscription_create':
             subscription_id = data_object['subscription']
+            charge_id = data_object['charge']
             payment_intent_id = data_object['payment_intent']
 
+            charge = stripe.Charge.retrieve(charge_id)
             payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+            card = charge.payment_method_details.card
+
+            subscription = stripe.Subscription.retrieve(subscription_id)
+            recurring = subscription.items.data[0].price.recurring.interval
+
+            recurring_donation_id = Recurring_Donation(email, amount, card, recurring).id
 
             stripe.Subscription.modify(
                 subscription_id,
-                default_payment_method=payment_intent.payment_method
+                default_payment_method=payment_intent.payment_method,
+                metadata={'recurring_donation_id' : recurring_donation_id}
             )
 
             note = 'Payment method attached to subscription'
@@ -314,8 +330,16 @@ def webhook_received():
             source = 'Stripe Checkout'
             referrer = data_object['metadata'].get('referrer')
             if data_object.get('invoice'):
+                invoice_id = data_object['invoice']
+                invoice = stripe.Invoice.retrieve(invoice_id)
+                subscription_id = invoice['subscription']
+                subscription = stripe.Subscription.retrieve(subscription_id)
                 fund = {'id' : 19}
-                recurring = 'monthly'
+                interval = subscription.items.data[0].price.recurring.interval
+                if interval == 'month':
+                    recurring = 'Monthly'
+                elif interval == 'year':
+                    recurring = 'Yearly'
             else:
                 fund = {'id' : 1}
                 recurring = None
@@ -333,8 +357,12 @@ def webhook_received():
             donation.update()
 
             email = customer['email']
+            tender_type = 'Stripe'
+            source = 'MAPSi'
+            page = 'Test Page'
 
-            Opportunity(email, amount)
+            if not recurring:
+                Opportunity(email, amount, tender_type, amount, source, page, charge, recurring=recurring)
 
             note = 'Donation successfully imported to the CRM'
 
