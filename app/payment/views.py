@@ -1,4 +1,5 @@
 import os
+import time
 import json
 import stripe
 
@@ -326,15 +327,17 @@ def webhook_received():
         
     if event_type == 'charge.succeeded':
         try:
+            charge = data_object['id']
+            time.sleep(10)
+            data_object = stripe.Charge.retrieve(charge)
             allocation = data_object['metadata']['allocation']
             amount = int(data_object['amount']) / 100
             campaign = data_object['metadata']['allocation']
-            charge = data_object['id']
             customer = stripe.Customer.retrieve(data_object['customer'])
             method = data_object['metadata']['method']
             source = 'Stripe Checkout'
             referrer = data_object['metadata'].get('referrer')
-            if data_object.get('invoice'):
+            if data_object.get('invoice'):                
                 invoice_id = data_object['invoice']
                 invoice = stripe.Invoice.retrieve(invoice_id)
                 subscription_id = invoice['subscription']
