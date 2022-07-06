@@ -298,8 +298,9 @@ def webhook_received():
             card = charge.payment_method_details.card
 
             subscription = stripe.Subscription.retrieve(subscription_id)
-            recurring = subscription.items.data[0].price.recurring.interval
+            stripe.Charge.modify(charge, metadata=subscription['metadata'])
 
+            recurring = subscription.items['data'][0]['price']['recurring']['interval']
             recurring_donation_id = Recurring_Donation(email, amount, card, recurring).id
 
             stripe.Subscription.modify(
@@ -335,7 +336,7 @@ def webhook_received():
                 subscription_id = invoice['subscription']
                 subscription = stripe.Subscription.retrieve(subscription_id)
                 fund = {'id' : 19}
-                interval = subscription.items.data[0].price.recurring.interval
+                interval = subscription.items['data'][0]['price']['recurring']['interval']
                 if interval == 'month':
                     recurring = 'Monthly'
                 elif interval == 'year':
