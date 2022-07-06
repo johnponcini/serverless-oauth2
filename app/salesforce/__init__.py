@@ -114,7 +114,6 @@ class Recurring_Donation:
                 'npe03__Organization__c': account_id,
                 'npe03__Amount__c': amount,
                 'Name': 'API Test',
-                'npsp__InstallmentFrequency__c': 1,
                 'npe03__Installment_Period__c': recurring,
                 'npsp__PaymentMethod__c': 'Credit Card',
                 'npe03__Recurring_Donation_Campaign': '7012f000000bOFfAAM',
