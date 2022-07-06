@@ -294,6 +294,9 @@ def webhook_received():
             payment_intent_id = data_object['payment_intent']
 
             charge = stripe.Charge.retrieve(charge_id)
+            customer_id = charge['customer']
+            customer = stripe.Customer.retrieve(customer_id)
+            email = customer['email']
             payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
             card = charge.payment_method_details.card
 
