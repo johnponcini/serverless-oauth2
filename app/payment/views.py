@@ -289,32 +289,33 @@ def webhook_received():
 
     # Invoice Payment Success
     if event_type == 'invoice.payment_succeeded':
-        if data_object['billing_reason'] == 'subscription_create':
-            subscription_id = data_object['subscription']
-            charge_id = data_object['charge']
-            payment_intent_id = data_object['payment_intent']
+        try:
+            if data_object['billing_reason'] == 'subscription_create':
+                subscription_id = data_object['subscription']
+                subscription = stripe.Subscription.retrieve(subscription_id)
+                charge_id = data_object['charge']
+                charge = stripe.Charge.retrieve(charge_id)
+                stripe.Charge.modify(charge_id, metadata=subscription['metadata'])
+                payment_intent_id = data_object['payment_intent']
+                customer_id = charge['customer']
+                customer = stripe.Customer.retrieve(customer_id)
+                email = customer['email']
+                amount = charge['amount']
+                payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+                card = charge['payment_method_details']['card']
+                recurring = subscription['items']['data'][0]['price']['recurring']['interval']
+                recurring_donation_id = Recurring_Donation(email, amount, card, recurring).id()
 
-            charge = stripe.Charge.retrieve(charge_id)
-            customer_id = charge['customer']
-            customer = stripe.Customer.retrieve(customer_id)
-            email = customer['email']
-            amount = charge['amount']
-            payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
-            card = charge['payment_method_details']['card']
+                stripe.Subscription.modify(
+                    subscription_id,
+                    default_payment_method=payment_intent.payment_method,
+                    metadata={'recurring_donation_id' : recurring_donation_id}
+                )
 
-            subscription = stripe.Subscription.retrieve(subscription_id)
-            stripe.Charge.modify(charge_id, metadata=subscription['metadata'])
+                note = 'Payment method attached to subscription'
 
-            recurring = subscription['items']['data'][0]['price']['recurring']['interval']
-            recurring_donation_id = Recurring_Donation(email, amount, card, recurring).id
-
-            stripe.Subscription.modify(
-                subscription_id,
-                default_payment_method=payment_intent.payment_method,
-                metadata={'recurring_donation_id' : recurring_donation_id}
-            )
-
-            note = 'Payment method attached to subscription'
+        except Exception as e:
+            return jsonify({'error': {'message': str(e)}}), 400
 
     if event_type == 'payment_intent.succeeded':
         try:
@@ -328,20 +329,19 @@ def webhook_received():
     if event_type == 'charge.succeeded':
         try:
             charge = data_object['id']
-            time.sleep(10)
             data_object = stripe.Charge.retrieve(charge)
-            allocation = data_object['metadata']['allocation']
             amount = int(data_object['amount']) / 100
-            campaign = data_object['metadata']['allocation']
             customer = stripe.Customer.retrieve(data_object['customer'])
-            method = data_object['metadata']['method']
             source = 'Stripe Checkout'
-            referrer = data_object['metadata'].get('referrer')
             if data_object.get('invoice'):                
                 invoice_id = data_object['invoice']
                 invoice = stripe.Invoice.retrieve(invoice_id)
                 subscription_id = invoice['subscription']
                 subscription = stripe.Subscription.retrieve(subscription_id)
+                allocation = subscription['metadata']['allocation']
+                campaign = subscription['metadata']['campaign']
+                method = subscription['metadata']['method']
+                referrer = subscription['metadata'].get('referrer')
                 fund = {'id' : 19}
                 interval = subscription['items']['data'][0]['price']['recurring']['interval']
                 if interval == 'month':
@@ -349,6 +349,12 @@ def webhook_received():
                 elif interval == 'year':
                     recurring = 'Yearly'
             else:
+                payment_intent_id = charge['payment_intent']
+                payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+                allocation = payment_intent['metadata']['allocation']
+                campaign = payment_intent['metadata']['campaign']
+                method = payment_intent['metadata']['method']
+                referrer = payment_intent['metadata'].get('referrer')
                 fund = {'id' : 1}
                 recurring = None
 
