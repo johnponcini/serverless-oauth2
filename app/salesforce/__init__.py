@@ -112,6 +112,7 @@ class Recurring_Donation:
         self.recurring_donation = sf.npe03__Recurring_Donation__c.create(
             {
                 'npe03__Organization__c': account_id,
+                'npe03__Contact__c': contact_id,
                 'npe03__Amount__c': amount,
                 'Name': 'API Test',
                 'npe03__Installment_Period__c': recurring,
