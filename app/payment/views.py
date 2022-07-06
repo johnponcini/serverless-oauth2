@@ -298,7 +298,7 @@ def webhook_received():
             card = charge.payment_method_details.card
 
             subscription = stripe.Subscription.retrieve(subscription_id)
-            stripe.Charge.modify(charge, metadata=subscription['metadata'])
+            stripe.Charge.modify(charge_id, metadata=subscription['metadata'])
 
             recurring = subscription.items['data'][0]['price']['recurring']['interval']
             recurring_donation_id = Recurring_Donation(email, amount, card, recurring).id
