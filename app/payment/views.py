@@ -297,8 +297,9 @@ def webhook_received():
             customer_id = charge['customer']
             customer = stripe.Customer.retrieve(customer_id)
             email = customer['email']
+            amount = charge['amount']
             payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
-            card = charge.payment_method_details.card
+            card = charge['payment_method_details']['card']
 
             subscription = stripe.Subscription.retrieve(subscription_id)
             stripe.Charge.modify(charge_id, metadata=subscription['metadata'])
