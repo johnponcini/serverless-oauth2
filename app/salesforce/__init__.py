@@ -59,7 +59,7 @@ class Opportunity:
     '''
     A container to define donations and associated donation functions.
     '''
-    def __init__(self, email, amount, tender_type, source, page, charge_id, recurring=None):
+    def __init__(self, email, amount, tender_type, source, page, charge_id):
         '''
         '''
         
@@ -69,8 +69,6 @@ class Opportunity:
 
         account_id = contact['AccountId']
 
-        if recurring:
-            pass
 
         sf.Opportunity.create(
             {

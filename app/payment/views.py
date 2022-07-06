@@ -382,7 +382,7 @@ def webhook_received():
             page = 'Test Page'
 
             if not recurring:
-                Opportunity(email, amount, tender_type, amount, source, page, charge, recurring=recurring)
+                Opportunity(email, amount, tender_type, amount, source, page, charge)
 
             note = 'Donation successfully imported to the CRM'
 
