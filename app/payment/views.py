@@ -354,7 +354,7 @@ def webhook_received():
                 elif interval == 'year':
                     recurring = 'Yearly'
             else:
-                payment_intent_id = charge['payment_intent']
+                payment_intent_id = data_object['payment_intent']
                 payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
                 allocation = payment_intent['metadata']['allocation']
                 campaign = payment_intent['metadata']['campaign']
