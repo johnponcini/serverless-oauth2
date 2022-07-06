@@ -115,7 +115,7 @@ class Recurring_Donation:
                 'npe03__Amount__c': amount,
                 'Name': 'API Test',
                 'npe03__Installment_Period__c': recurring,
-                'Day_of_Month__c': datetime.now().strftime('%-d'),
+                'npe03__Date_Established__c': datetime.now().strftime('%Y-%m-%d'),
             }
         )
 
