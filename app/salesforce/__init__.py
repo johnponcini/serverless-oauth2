@@ -122,4 +122,4 @@ class Recurring_Donation:
         )
 
     def id(self):
-        return self.recurring_donation
+        return self.recurring_donation['id']

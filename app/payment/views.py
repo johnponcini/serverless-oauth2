@@ -342,6 +342,7 @@ def webhook_received():
                 campaign = subscription['metadata']['campaign']
                 method = subscription['metadata']['method']
                 referrer = subscription['metadata'].get('referrer')
+                redirect = subscription['metadata'].get('redirect')
                 fund = {'id' : 19}
                 interval = subscription['items']['data'][0]['price']['recurring']['interval']
                 if interval == 'month':
@@ -355,10 +356,10 @@ def webhook_received():
                 campaign = payment_intent['metadata']['campaign']
                 method = payment_intent['metadata']['method']
                 referrer = payment_intent['metadata'].get('referrer')
+                redirect = payment_intent['metadata'].get('redirect')
                 fund = {'id' : 1}
                 recurring = None
 
-            redirect = data_object['metadata'].get('redirect')
             if redirect:
                 page = "www.maps.org/" + redirect
             else:
