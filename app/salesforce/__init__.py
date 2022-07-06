@@ -115,7 +115,6 @@ class Recurring_Donation:
                 'npe03__Amount__c': amount,
                 'Name': 'API Test',
                 'npe03__Installment_Period__c': recurring,
-                'npsp__PaymentMethod__c': 'Credit Card',
                 'npe03__Recurring_Donation_Campaign': '7012f000000bOFfAAM',
                 'npsp__CardExpirationMonth__c': exp_month,
                 'npsp__CardExpirationYear__c': exp_year,
