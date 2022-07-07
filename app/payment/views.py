@@ -291,19 +291,33 @@ def webhook_received():
     if event_type == 'invoice.payment_succeeded':
         try:
             if data_object['billing_reason'] == 'subscription_create':
+
+                # Retrieve the associated Subscription object
                 subscription_id = data_object['subscription']
                 subscription = stripe.Subscription.retrieve(subscription_id)
+
+                # Retrieve the associated Charge
                 charge_id = data_object['charge']
                 charge = stripe.Charge.retrieve(charge_id)
+
+                # Attach Subscription metadata to the Charge
                 stripe.Charge.modify(charge_id, metadata=subscription['metadata'])
+
+                # Retrive the associated Payment Intent
                 payment_intent_id = data_object['payment_intent']
+                payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+
+                # Retrieve the associated Customer
                 customer_id = charge['customer']
                 customer = stripe.Customer.retrieve(customer_id)
+
+                # Extract fields
                 email = customer['email']
-                amount = charge['amount']
-                payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+                amount = int(data_object['amount']) / 100
                 card = charge['payment_method_details']['card']
                 recurring = subscription['items']['data'][0]['price']['recurring']['interval']
+                
+                
                 recurring_donation_id = Recurring_Donation(email, amount, card, recurring).id()
 
                 stripe.Subscription.modify(
@@ -388,6 +402,5 @@ def webhook_received():
 
         except Exception as e:
             return jsonify({'error': {'message': str(e)}}), 400
-        
 
     return jsonify(success=True, note=note)
