@@ -290,43 +290,57 @@ def webhook_received():
     # Invoice Payment Success
     if event_type == 'invoice.payment_succeeded':
         try:
+            # Retrieve the associated Subscription object
+            subscription_id = data_object['subscription']
+            subscription = stripe.Subscription.retrieve(subscription_id)
+
+            # Retrieve the associated Charge
+            charge_id = data_object['charge']
+            charge = stripe.Charge.retrieve(charge_id)
+
+            # Attach Subscription metadata to the Charge
+            stripe.Charge.modify(charge_id, metadata=subscription['metadata'])
+
+            # Retrive the associated Payment Intent
+            payment_intent_id = data_object['payment_intent']
+            payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+
+            # Retrieve the associated Customer
+            customer_id = charge['customer']
+            customer = stripe.Customer.retrieve(customer_id)
+
+            # Extract fields
+            email = customer['email']
+            amount = int(data_object['amount']) / 100
+            card = charge['payment_method_details']['card']
+            recurring = subscription['items']['data'][0]['price']['recurring']['interval']
+
             if data_object['billing_reason'] == 'subscription_create':
-
-                # Retrieve the associated Subscription object
-                subscription_id = data_object['subscription']
-                subscription = stripe.Subscription.retrieve(subscription_id)
-
-                # Retrieve the associated Charge
-                charge_id = data_object['charge']
-                charge = stripe.Charge.retrieve(charge_id)
-
-                # Attach Subscription metadata to the Charge
-                stripe.Charge.modify(charge_id, metadata=subscription['metadata'])
-
-                # Retrive the associated Payment Intent
-                payment_intent_id = data_object['payment_intent']
-                payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
-
-                # Retrieve the associated Customer
-                customer_id = charge['customer']
-                customer = stripe.Customer.retrieve(customer_id)
-
-                # Extract fields
-                email = customer['email']
-                amount = int(data_object['amount']) / 100
-                card = charge['payment_method_details']['card']
-                recurring = subscription['items']['data'][0]['price']['recurring']['interval']
                 
-                
+                # Create a Recurring Donation
                 recurring_donation_id = Recurring_Donation(email, amount, card, recurring).id()
 
+                # Create an Opportunity and attach it to the newly created Recurring Donation
+                Opportunity(email, amount, tender_type, source, page, charge, recurring_donation_id)
+
+                # Update the Subscription object with the default payment method and recurring donation ID
                 stripe.Subscription.modify(
                     subscription_id,
                     default_payment_method=payment_intent.payment_method,
                     metadata={'recurring_donation_id' : recurring_donation_id}
                 )
+            
+                note = 'Payment method attached to subscription, Recurring Donation and Opportunity created.'
 
-                note = 'Payment method attached to subscription'
+            else:
+                
+                # Extract the Recurring Donation ID from the Subscription metadata
+                recurring_donation_id = subscription['metadata']['recurring_donation_id']
+
+                # Create the Opportunity
+                Opportunity(email, amount, tender_type, source, page, charge, recurring_donation_id)
+
+                note = 'Opportunity created for Recurring Donation.'
 
         except Exception as e:
             return jsonify({'error': {'message': str(e)}}), 400

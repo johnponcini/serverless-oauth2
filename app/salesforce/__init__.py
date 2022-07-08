@@ -59,7 +59,7 @@ class Opportunity:
     '''
     A container to define donations and associated donation functions.
     '''
-    def __init__(self, email, amount, tender_type, source, page, charge_id):
+    def __init__(self, email, amount, tender_type, source, page, charge_id, recurring_donation_id=None):
         '''
         '''
         
@@ -69,24 +69,44 @@ class Opportunity:
 
         account_id = contact['AccountId']
 
+        if recurring_donation_id:
+            sf.Opportunity.create(
+                {
+                    'AccountId': account_id,
+                    'Amount': amount,
+                    'Name': 'API Test',
+                    'Type': 'Donation',
+                    'StageName': 'Posted',
+                    'CloseDate': datetime.now().strftime('%Y-%m-%d'),
+                    'CampaignId': '7012f000000bOFfAAM',
+                    'Purpose__c': 'Unrestricted',
+                    'Tender_Type__c': tender_type,
+                    'Platform_Source__c': source,
+                    'Donation_Page__c': page,
+                    'Stripe_Charge_ID__c' : charge_id,
+                    'npe03__Recurring_Donation__c': recurring_donation_id
+                }
+            )
 
-        sf.Opportunity.create(
-            {
-                'AccountId': account_id,
-                'Amount': amount,
-                'Name': 'API Test',
-                'Type': 'Donation',
-                'StageName': 'Posted',
-                'CloseDate': datetime.now().strftime('%Y-%m-%d'),
-                'CampaignId': '7012f000000bOFfAAM',
-                'Purpose__c': 'Unrestricted',
-                'Tender_Type__c': tender_type,
-                'Platform_Source__c': source,
-                'Donation_Page__c': page,
-                'Stripe_Charge_ID__c' : charge_id
-            }
-        )
+        else:
+            sf.Opportunity.create(
+                {
+                    'AccountId': account_id,
+                    'Amount': amount,
+                    'Name': 'API Test',
+                    'Type': 'Donation',
+                    'StageName': 'Posted',
+                    'CloseDate': datetime.now().strftime('%Y-%m-%d'),
+                    'CampaignId': '7012f000000bOFfAAM',
+                    'Purpose__c': 'Unrestricted',
+                    'Tender_Type__c': tender_type,
+                    'Platform_Source__c': source,
+                    'Donation_Page__c': page,
+                    'Stripe_Charge_ID__c' : charge_id
+                }
+            )
     
+        
 
 class Recurring_Donation:
     '''
