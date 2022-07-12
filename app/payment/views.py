@@ -321,7 +321,7 @@ def webhook_received():
                 recurring_donation_id = Recurring_Donation(email, amount, card, recurring).id()
 
                 # Create an Opportunity and attach it to the newly created Recurring Donation
-                Opportunity(email, amount, tender_type, source, page, charge, recurring_donation_id)
+                Opportunity(email, amount, tender_type, source, page, charge_id, recurring_donation_id)
 
                 # Update the Subscription object with the default payment method and recurring donation ID
                 stripe.Subscription.modify(
@@ -338,7 +338,7 @@ def webhook_received():
                 recurring_donation_id = subscription['metadata']['recurring_donation_id']
 
                 # Create the Opportunity
-                Opportunity(email, amount, tender_type, source, page, charge, recurring_donation_id)
+                Opportunity(email, amount, tender_type, source, page, charge_id, recurring_donation_id)
 
                 note = 'Opportunity created for Recurring Donation.'
 
