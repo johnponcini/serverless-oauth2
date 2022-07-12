@@ -311,7 +311,7 @@ def webhook_received():
 
             # Extract fields
             email = customer['email']
-            amount = int(data_object['amount']) / 100
+            amount = int(charge['amount']) / 100
             card = charge['payment_method_details']['card']
             recurring = subscription['items']['data'][0]['price']['recurring']['interval']
 
