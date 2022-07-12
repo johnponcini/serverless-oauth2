@@ -39,7 +39,10 @@ def create_customer():
             customer = stripe.Customer.retrieve(q.data[0].id) 
         else:
             # Create a new customer object
-            customer = stripe.Customer.create(**data)
+            customer = stripe.Customer.create(
+                **data,
+                test_clock='clock_1LKo1mKUVYXXXzNDaxWeMHD1'
+            )
         response = jsonify(customer=customer)
 
         # We're simulating authentication here by storing the ID of the customer
