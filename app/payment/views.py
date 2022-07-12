@@ -252,6 +252,11 @@ def webhook_received():
     webhook_secret = os.getenv('STRIPE_WEBHOOK_SECRET')
     request_data = json.loads(request.data)
 
+    # Define default fields
+    tender_type = 'Stripe'
+    source = 'MAPSi'
+    page = 'Test Page'
+
     if webhook_secret:
         # Retrieve the event by verifying the signature using the raw body and secret if webhook signing is configured.
         signature = request.headers.get('stripe-signature')
@@ -405,9 +410,6 @@ def webhook_received():
             donation.update()
 
             email = customer['email']
-            tender_type = 'Stripe'
-            source = 'MAPSi'
-            page = 'Test Page'
 
             if not recurring:
                 Opportunity(email, amount, tender_type, source, page, charge)
