@@ -40,8 +40,7 @@ def create_customer():
         else:
             # Create a new customer object
             customer = stripe.Customer.create(
-                **data,
-                test_clock='clock_1LKo1mKUVYXXXzNDaxWeMHD1'
+                **data
             )
         response = jsonify(customer=customer)
 
