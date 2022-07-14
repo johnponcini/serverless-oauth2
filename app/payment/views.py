@@ -364,8 +364,7 @@ def webhook_received():
         
     if event_type == 'charge.succeeded':
         try:
-            charge = data_object['id']
-            data_object = stripe.Charge.retrieve(charge)
+            charge_id = data_object['id']
             amount = int(data_object['amount']) / 100
             customer = stripe.Customer.retrieve(data_object['customer'])
             source = 'Stripe Checkout'
@@ -407,15 +406,16 @@ def webhook_received():
 
 
             donation = Donation(
-                allocation, amount, campaign, charge, customer, fund, method,
+                allocation, amount, campaign, charge_id, customer, fund, method,
                 source, page=page, recurring=recurring, referrer=referrer
             )
             donation.update()
 
             email = customer['email']
+            source = 'MAPSi'
 
             if not recurring:
-                Opportunity(email, amount, tender_type, source, page, charge)
+                Opportunity(email, amount, tender_type, source, page, charge_id)
 
             note = 'Donation successfully imported to the CRM'
 
