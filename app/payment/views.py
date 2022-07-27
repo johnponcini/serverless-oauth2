@@ -129,6 +129,7 @@ def create_subscription():
     except Exception as e:
         return jsonify({'error': {'message': str(e)}}), 400
 
+
 @payment.route('/update-donation', methods=['POST'])
 @csrf.exempt
 def update_donation():
@@ -229,6 +230,11 @@ def update_user_premiums():
 #@payment.route('/subscriptions', methods=['GET'])
 #def get_subscriptions():
 
+@app.route('/update-reference', methods=['POST'])
+def update_reference():
+        data = json.loads(request.data)
+        # Apply the data to the Opportunity/Donation or Account?
+        return jsonify({'success':True}), 200
 
 
 @payment.route('/every_webhook', methods=['POST'])
