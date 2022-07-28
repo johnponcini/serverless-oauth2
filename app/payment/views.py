@@ -230,12 +230,12 @@ def update_user_premiums():
 #@payment.route('/subscriptions', methods=['GET'])
 #def get_subscriptions():
 
-@app.route('/update-reference', methods=['POST'])
+@payment.route('/update-reference', methods=['POST'])
 @csrf.exempt
 def update_reference():
-        data = json.loads(request.data)
-        # Apply the data to the Opportunity/Donation or Account?
-        return jsonify({'success':True}), 200
+    data = json.loads(request.data)
+    # Apply the data to the Opportunity/Donation or Account?
+    return jsonify({'success':True}), 200
 
 
 @payment.route('/every_webhook', methods=['POST'])
