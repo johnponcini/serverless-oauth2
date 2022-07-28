@@ -231,6 +231,7 @@ def update_user_premiums():
 #def get_subscriptions():
 
 @app.route('/update-reference', methods=['POST'])
+@csrf.exempt
 def update_reference():
         data = json.loads(request.data)
         # Apply the data to the Opportunity/Donation or Account?
