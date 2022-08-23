@@ -8,8 +8,7 @@ stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
 from simple_salesforce import Salesforce
 
-sf = Salesforce(instance_url="https://maps501c3--arkustest.lightning.force.com", username="digital@maps.org", password="eu3HxxbyX!J_", security_token="8P1xyKF6YFwF9xV0UssDj4ja", domain="test")
-
+sf = Salesforce(instance_url="https://maps501c3--arkustest.lightning.force.com", username="digital@maps.org", password="82TZr6czkf7vt9v!", security_token="SD0gc6FXmE136SesuK7SS4H08", domain="test")
 
 class Contact:
 
