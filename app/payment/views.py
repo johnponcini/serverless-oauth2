@@ -65,7 +65,7 @@ def create_payment():
     #
     # Some example payment method types include `card`, `ideal`, and `alipay`.
     payment_method_type = data['paymentMethodType']
-    amount = int(data['amount']) * 100
+    amount = float(data['amount']) * 100
     currency = data['currency']
     customer = data['customer']
     metadata = data['metadata']
@@ -112,7 +112,7 @@ def create_payment():
 @csrf.exempt
 def create_subscription():
     data = json.loads(request.data)
-    data['items'][0]['price_data']['unit_amount'] = int(data['items'][0]['price_data']['unit_amount']) * 100
+    data['items'][0]['price_data']['unit_amount'] = float(data['items'][0]['price_data']['unit_amount']) * 100
 
     try:
         subscription = stripe.Subscription.create(
