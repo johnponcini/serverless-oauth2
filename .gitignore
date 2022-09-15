@@ -4,3 +4,4 @@
 venv/*
 *.env
 zappa_settings.json*
+.DS_Store
