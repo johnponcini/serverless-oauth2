@@ -3,3 +3,4 @@
 *.zip
 venv/*
 *.env
+zappa_settings.json*
