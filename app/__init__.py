@@ -8,6 +8,9 @@ db = SQLAlchemy(metadata=MetaData())
 
 
 def create_app(config_name="development"):
+    '''
+    Configure app and Define Blueprints for app components
+    '''
     if config_name == "development":
         print("App is in DEV MODE!")
     app = Flask(__name__)
@@ -37,7 +40,12 @@ def create_app(config_name="development"):
 
     app.register_blueprint(payment_blueprint, url_prefix="/payment")
 
+    from .payment import webhook as webhook_blueprint
+
+    app.register_blueprint(webhook_blueprint, url_prefix="/payment/webhook")
+
     # Admin
+
     from .admin import sfadmin as admin_blueprint
 
     app.register_blueprint(admin_blueprint, url_prefix="/sfadmin")

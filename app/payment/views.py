@@ -1,19 +1,17 @@
 import os
 import time
 import json
-import stripe
 
 from flask import Blueprint, request, session, url_for
 from flask import render_template, redirect, jsonify
 from flask_login import current_user, login_required
 
-from config import csrf
+from config import csrf, stripe
 
 from app.salesforce import Contact, Opportunity, Recurring_Donation
 
 from app.neon import Account, Donation
 
-stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
 payment = Blueprint("payment", __name__)
 

@@ -1,15 +1,12 @@
-import os
 from datetime import datetime 
-import stripe
-from simple_salesforce import Salesforce
 
 from flask import Blueprint, request, session, url_for
-from flask import render_template, redirect, jsonify
-from flask_login import current_user, login_required
+from flask import render_template, redirect
+from flask_login import current_user
 
 from app.admin.forms import CreateContactForm, CreateDonationForm
 
-sf = Salesforce(instance_url="https://maps501c3--arkustest.lightning.force.com", username="digital@maps.org", password="82TZr6czkf7vt9v!", security_token="SD0gc6FXmE136SesuK7SS4H08", domain="test")
+from config import sf
 
 sfadmin = Blueprint("sfadmin", __name__)
 

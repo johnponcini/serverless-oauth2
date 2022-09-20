@@ -1,4 +1,5 @@
 import os
+import stripe
 
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -7,6 +8,8 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_s3 import FlaskS3
 from flask_authorize import Authorize
+
+from simple_salesforce import Salesforce
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -27,6 +30,19 @@ if os.path.exists("config.env"):
         if len(var) == 2:
             os.environ[var[0]] = var[1].replace('"', "")
 
+
+# Salesforce Integration
+
+sf = Salesforce(
+    instance_url=os.environ.get('SF_INSTANCE_URL'),
+    username=os.environ.get(), 
+    password=os.environ.get(), 
+    security_token=os.environ.get(), 
+    domain=os.environ.get()
+)
+
+# Stripe Configuration
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
 class Config:
     APP_NAME = os.environ.get("APP_NAME")
