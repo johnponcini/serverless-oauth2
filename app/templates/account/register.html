@@ -5,12 +5,20 @@
 <section class="section">
   <div class="container">
     <div class="columns mt-2">
-      <div class="column is-half is-offset-one-quarter py-2 px-2 account-container">
+      <div class="column is-two-fifths side-hero">
+        <h1 class="title">The Gateway to Your Psychedelic Journey Awaits</h1>
+        <div class="side-hero-image">
+          <img>
+        </div>
+      </div>
+      <div class="column is-three-fifths py-2 px-2 account-container">
         <div id="background">
           <div id="container">
           </div>
         </div>
-        <h2 class="title has-text-centered">Register</h2>
+        <h2 class="title">Register</h2>
+        <h4 class="subtitle">Begin your trip with us!</h4>
+        <p>Join thousands of individuals in supporting psychedelic advocay, research, education, and harm reduction. Create an account with MAPS and begin setting up your profile.</p>
         {% set flashes = {
           'danger':   get_flashed_messages(category_filter=['form-danger']),
           'warning': get_flashed_messages(category_filter=['form-check-email']),
@@ -28,6 +36,7 @@
           {{ f.form_message(flashes['success'], header='Success!', class='success') }}
           {{ f.render_form_field(form.submit, extra_classes="form-group mt-2") }}
         {{ f.end_form(form) }}
+        <p>Already have an account? <a href="{{ url_for(account.login)}}">Login in</a></p>
       </div>
     </div>
   </div>
