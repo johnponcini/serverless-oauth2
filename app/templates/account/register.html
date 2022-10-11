@@ -36,7 +36,7 @@
           {{ f.form_message(flashes['success'], header='Success!', class='success') }}
           {{ f.render_form_field(form.submit, extra_classes="form-group mt-2") }}
         {{ f.end_form(form) }}
-        <p>Already have an account? <a href="{{ url_for(account.login)}}">Login in</a></p>
+        <p>Already have an account? <a href="{{ url_for('account.login')}}">Login in</a></p>
       </div>
     </div>
   </div>
