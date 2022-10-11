@@ -91,6 +91,10 @@ h1, h2, h3, h4 {
   width: 40%;
 }
 
+.side-hero-title {
+  color: #ffffff;
+}
+
 @media screen and (min-width: 769px) {
   #logo img {
     margin-left: 40%;

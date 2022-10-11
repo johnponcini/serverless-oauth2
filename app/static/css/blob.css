@@ -1,12 +1,7 @@
 #background {
   position: absolute;
   overflow: hidden;
-  height: calc(90% + 6px);
-  width: calc(50% + 18px);
   z-index: -1;
-  margin-left: calc(25% + 3px);
-  top: -3px;
-  border-radius: 33px;
 }
 
 #main {
