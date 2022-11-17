@@ -37,8 +37,7 @@ sf = Salesforce(
     instance_url=os.environ.get('SF_INSTANCE_URL'),
     username=os.environ.get('SF_USERNAME'), 
     password=os.environ.get('SF_PASSWORD'), 
-    security_token=os.environ.get('SF_SECURITY_TOKEN'), 
-    domain=os.environ.get('SF_DOMAIN')
+    security_token=os.environ.get('SF_SECURITY_TOKEN')
 )
 
 # Stripe Configuration

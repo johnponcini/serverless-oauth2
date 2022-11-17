@@ -8,7 +8,7 @@ from flask import render_template, redirect, jsonify
 
 from config import csrf
 
-from app.salesforce import Contact, Opportunity, Recurring_Donation
+from app.salesforce import Contact, Opportunity, Recurring_Donation, Payment
 
 from app.neon import Account, Donation
 
@@ -19,7 +19,7 @@ webhook = Blueprint("webhook", __name__)
 @webhook.route('/', methods=['POST'])
 @csrf.exempt
 def webhook_received():
-    # You can use webhooks to receive information about asynchronous payment events.
+        # You can use webhooks to receive information about asynchronous payment events.
     # For more about our webhook events check out https://stripe.com/docs/webhooks.
     webhook_secret = os.getenv('STRIPE_WEBHOOK_SECRET')
     request_data = json.loads(request.data)
@@ -28,6 +28,8 @@ def webhook_received():
     tender_type = 'Stripe'
     source = 'MAPSi'
     page = 'Test Page'
+
+    note = ''
 
     if webhook_secret:
         # Retrieve the event by verifying the signature using the raw body and secret if webhook signing is configured.
@@ -44,26 +46,7 @@ def webhook_received():
         data = request_data['data']
         event_type = request_data['type']
     data_object = data['object']
-
-    # New customer
-    if event_type == 'customer.created':
-        try:
-            email = data_object['email']
-            name = data_object['name']
-            method = data_object['metadata']['method']
-            origin = 'Stripe Donation Module'
-            address = data_object['address']
-
-            Account(email, name, method, origin)
-
-            Contact(email, name, address)
-
-            note = email + " has created an account and is in the CRM"
-
-        except Exception as e:
-            return jsonify({'error': {'message': str(e)}}), 400
         
-
     # Invoice Payment Success
     if event_type == 'invoice.payment_succeeded':
         try:
@@ -75,9 +58,7 @@ def webhook_received():
             charge_id = data_object['charge']
             charge = stripe.Charge.retrieve(charge_id)
 
-            # Attach Subscription metadata to the Charge
-            stripe.Charge.modify(charge_id, metadata=subscription['metadata'])
-
+            card = charge['payment_method_details']['card']
             # Retrive the associated Payment Intent
             payment_intent_id = data_object['payment_intent']
             payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
@@ -85,20 +66,40 @@ def webhook_received():
             # Retrieve the associated Customer
             customer_id = charge['customer']
             customer = stripe.Customer.retrieve(customer_id)
+            try:
+                email = customer['email']
+                name = customer.get('name')
+                source = 'Stripe Checkout'
+                origin = 'Stripe Donation Module'
+                if customer['address']:
+                    address = customer['address']
+                else:
+                    address = None
 
+                Account(email, name, source, origin)
+
+                contact = Contact(email, name, address).contact
+
+                note += email + " has created an account and is in the CRM. "
+
+            except Exception as e:
+                return jsonify({'error': {'message': str(e)}}), 400
             # Extract fields
             email = customer['email']
             amount = int(charge['amount']) / 100
-            card = charge['payment_method_details']['card']
             recurring = subscription['items']['data'][0]['price']['recurring']['interval']
 
             if data_object['billing_reason'] == 'subscription_create':
                 
+                source = 'MAPSi'
+
                 # Create a Recurring Donation
-                recurring_donation_id = Recurring_Donation(email, amount, card, recurring).id()
+                #recurring_donation_id = Recurring_Donation(contact, amount, recurring).id()
+                recurring_donation_id = None
 
                 # Create an Opportunity and attach it to the newly created Recurring Donation
-                Opportunity(email, amount, tender_type, source, page, charge_id, recurring_donation_id)
+                opportunity = Opportunity(contact, amount, tender_type, source, page, charge_id, recurring_donation_id)
+                Payment(opportunity.id(), amount, charge_id, card)
 
                 # Update the Subscription object with the default payment method and recurring donation ID
                 stripe.Subscription.modify(
@@ -107,17 +108,29 @@ def webhook_received():
                     metadata={'recurring_donation_id' : recurring_donation_id}
                 )
             
-                note = 'Payment method attached to subscription, Recurring Donation and Opportunity created.'
+                note += 'Payment method attached to subscription, Recurring Donation and Opportunity created.'
 
             else:
-                
+                source = 'MAPSi'
                 # Extract the Recurring Donation ID from the Subscription metadata
-                recurring_donation_id = subscription['metadata']['recurring_donation_id']
+                try:
+                    recurring_donation_id = subscription['metadata']['recurring_donation_id']
+                except:
+                    recurring_donation_id = Recurring_Donation(email, amount, recurring).id()
+                    stripe.Subscription.modify(
+                        subscription_id,
+                        metadata={'recurring_donation_id' : recurring_donation_id}
+                    )
 
                 # Create the Opportunity
-                Opportunity(email, amount, tender_type, source, page, charge_id, recurring_donation_id)
+                recurring_donation_id = None
+                opportunity = Opportunity(contact, amount, tender_type, source, page, charge_id, recurring_donation_id)
+                Payment(opportunity.id(), amount, charge_id, card)
 
-                note = 'Opportunity created for Recurring Donation.'
+                note += 'Opportunity created for Recurring Donation.'
+            
+            # Attach Subscription metadata to the Charge
+            stripe.Charge.modify(charge_id, metadata=subscription['metadata'])
 
         except Exception as e:
             return jsonify({'error': {'message': str(e)}}), 400
@@ -135,22 +148,50 @@ def webhook_received():
         try:
             charge_id = data_object['id']
             amount = int(data_object['amount']) / 100
+            card = data_object['payment_method_details']['card']
             customer = stripe.Customer.retrieve(data_object['customer'])
+            try:
+                email = customer['email']
+                name = customer['name']
+                source = 'Stripe Checkout'
+                origin = 'Stripe Donation Module'
+                if customer['address']:
+                    address = customer['address']
+                else:
+                    address = None
+
+                Account(email, name, source, origin)
+
+                contact = Contact(email, name, address).contact
+
+                note += email + " has created an account and is in the CRM. "
+
+            except Exception as e:
+                return jsonify({'error': {'message': str(e)}}), 400
+
             source = 'Stripe Checkout'
             if data_object.get('invoice'):                
                 invoice_id = data_object['invoice']
                 invoice = stripe.Invoice.retrieve(invoice_id)
                 subscription_id = invoice['subscription']
                 subscription = stripe.Subscription.retrieve(subscription_id)
-                allocation = subscription['metadata']['allocation']
-                campaign = subscription['metadata']['campaign']
-                method = subscription['metadata']['method']
+                try:
+                    allocation = subscription['metadata']['allocation']
+                    campaign = subscription['metadata']['campaign']
+                    method = subscription['metadata']['method']
+                except:
+                    allocation = 'unrestricted'
+                    campaign = 'general purpose'
+                    method = 'online'
                 referrer = subscription['metadata'].get('referrer')
                 redirect = subscription['metadata'].get('redirect')
                 if redirect:
                     page = "www.maps.org/" + redirect
                 else:
-                    page = subscription['metadata']['donation_page']
+                    try:
+                        page = payment_intent['metadata']['donation_page']
+                    except:
+                        page = 'https://maps.org'
                 fund = {'id' : 19}
                 interval = subscription['items']['data'][0]['price']['recurring']['interval']
                 if interval == 'month':
@@ -158,35 +199,45 @@ def webhook_received():
                 elif interval == 'year':
                     recurring = 'Yearly'
             else:
-                payment_intent_id = data_object['payment_intent']
-                payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
-                allocation = payment_intent['metadata']['allocation']
-                campaign = payment_intent['metadata']['campaign']
-                method = payment_intent['metadata']['method']
-                referrer = payment_intent['metadata'].get('referrer')
-                redirect = payment_intent['metadata'].get('redirect')
-                if redirect:
-                    page = "www.maps.org/" + redirect
-                else:
-                    page = payment_intent['metadata']['donation_page']
-                fund = {'id' : 1}
-                recurring = None
+                try:
+                    payment_intent_id = data_object['payment_intent']
+                    payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+                    try:
+                        allocation = payment_intent['metadata']['allocation']
+                        campaign = payment_intent['metadata']['campaign']
+                        method = payment_intent['metadata']['method']
+                    except:
+                        allocation = 'unrestricted'
+                        campaign = 'general purpose'
+                        method = 'online'                     
+                    referrer = payment_intent['metadata'].get('referrer')
+                    redirect = payment_intent['metadata'].get('redirect')
+                    if redirect:
+                        page = "www.maps.org/" + redirect
+                    else:
+                        try:
+                            page = payment_intent['metadata']['donation_page']
+                        except:
+                            page = 'https://maps.org'
+                    fund = {'id' : 1}
+                    recurring = None
+                    if not data_object['description'] or 'Order' not in data_object['description']:
+                        opportunity = Opportunity(contact, amount, tender_type, 'MAPSi', page, charge_id)
+                        Payment(opportunity.id(), amount, charge_id, card)
+                        
+                except Exception as e:
+                    return jsonify({'error': {'message': str(e)}}), 400
 
+            if not data_object['description'] or 'Order' not in data_object['description']:
+                donation = Donation(
+                    allocation, amount, campaign, charge_id, customer, fund, method,
+                    source, page=page, recurring=recurring, referrer=referrer
+                )
+                donation.update()
 
-
-            donation = Donation(
-                allocation, amount, campaign, charge_id, customer, fund, method,
-                source, page=page, recurring=recurring, referrer=referrer
-            )
-            donation.update()
-
-            email = customer['email']
-            source = 'MAPSi'
-
-            if not recurring:
-                Opportunity(email, amount, tender_type, source, page, charge_id)
-
-            note = 'Donation successfully imported to the CRM'
+                note += 'Donation successfully imported to the CRM'
+            else:
+                note += 'Store Orders not currently imported via webhooks to the CRM.'
 
         except Exception as e:
             return jsonify({'error': {'message': str(e)}}), 400
