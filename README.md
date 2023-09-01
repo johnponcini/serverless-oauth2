@@ -1,5 +1,14 @@
-# How to deploy an OAuth 2.0 Provider on AWS Lambda using Zappa
+# MAPS Membership Platform
 
+## Overview
+
+This application is the bridge between our organization's online platforms.
+It is a user authentication and authorization platform that uses the
+[OAuth 2.0](https://oauth.net/2/) protocol and directly integrates and syncs 
+with our other business platforms, specifically the following:
+- Cardly
+- Salesforce
+- Stripe
 
 
 ## How to create an OAuth 2.0 Provider
