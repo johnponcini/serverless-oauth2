@@ -1,296 +1,114 @@
-# MAPS Membership Platform
+# Flask OAuth 2.0 Membership Platform
 
-## Overview
+The Flask OAuth 2.0 Membership Platform is a web application designed to provide membership management capabilities with OAuth 2.0 authentication. It includes features for user accounts, payments, and administration. This README provides an overview of the project and instructions for setting it up.
 
-This application is the bridge between our organization's online platforms.
-It is a user authentication and authorization platform that uses the
-[OAuth 2.0](https://oauth.net/2/) protocol and directly integrates and syncs 
-with our other business platforms, specifically the following:
-- Cardly
-- Salesforce
-- Stripe
+## Table of Contents
 
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [OAuth 2.0 Integration](#oauth-20-integration)
+- [Admin Dashboard](#admin-dashboard)
+- [License](#license)
 
-## How to create an OAuth 2.0 Provider
+## Features
 
-This is an example of OAuth 2.0 server in [Authlib](https://authlib.org/).
-If you are looking for old Flask-OAuthlib implementation, check the
-`flask-oauthlib` branch.
+- User account management.
+- OAuth 2.0 authentication integration.
+- Payment processing capabilities.
+- Admin dashboard for managing users and payments.
 
-- Documentation: <https://docs.authlib.org/en/latest/flask/2/>
-- Authlib Repo: <https://github.com/lepture/authlib>
+## Prerequisites
 
-## Sponsors
+Before you begin, ensure you have met the following requirements:
 
-<table>
-  <tr>
-    <td><img align="middle" width="48" src="https://user-images.githubusercontent.com/290496/39297078-89d00928-497d-11e8-8119-0c53afe14cd0.png"></td>
-    <td>If you want to quickly add secure token-based authentication to Python projects, feel free to check Auth0's Python SDK and free plan at <a href="https://auth0.com/overview?utm_source=GHsponsor&utm_medium=GHsponsor&utm_campaign=example-oauth2-server">auth0.com/overview</a>.</td>
-  </tr>
-</table>
+- Python 3.7 or higher installed.
+- SQLAlchemy and Flask-SQLAlchemy.
+- Flask and other required dependencies (install using `pip install -r requirements.txt`).
+- OAuth 2.0 credentials from your chosen OAuth provider.
+- Configuration settings (see [Configuration](#configuration)).
 
-## Take a quick look
+## Getting Started
 
-This is a ready to run example, let's take a quick experience at first. To
-run the example, we need to install all the dependencies:
+1. Clone this repository:
 
-```bash
-$ pip install -r requirements.txt
-```
+   ```shell
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
 
-Set Flask and Authlib environment variables:
+2. Create a virtual environment and activate it:
 
-```bash
-# disable check https (DO NOT SET THIS IN PRODUCTION)
-$ export AUTHLIB_INSECURE_TRANSPORT=1
-```
+   ```shell
+   python -m venv venv
+   source venv/bin/activate
+   ```
 
-Create Database and run the development server:
+3. Install the required dependencies:
 
-```bash
-$ flask run
-```
+   ```shell
+   pip install -r requirements.txt
+   ```
 
-Now, you can open your browser with `http://127.0.0.1:5000/`, login with any
-name you want.
+4. Set up your configuration settings (see [Configuration](#configuration)).
 
-Before testing, we need to create a client:
+5. Run the application:
 
-![create a client](https://user-images.githubusercontent.com/290496/38811988-081814d4-41c6-11e8-88e1-cb6c25a6f82e.png)
+   ```shell
+   flask run
+   ```
 
-### Password flow example
+The application will start, and you can access it locally in your web browser.
 
-Get your `client_id` and `client_secret` for testing. In this example, we
-have enabled `password` grant types, let's try:
+## Project Structure
 
-```
-$ curl -u ${client_id}:${client_secret} -XPOST http://127.0.0.1:5000/oauth/token -F grant_type=password -F username=${username} -F password=valid -F scope=profile
-```
+The project structure is organized as follows:
 
-Because this is an example, every user's password is `valid`. Now you can access `/api/me`:
+- `app`: This directory contains the main application code.
+  - `__init__.py`: Initializes the Flask application.
+  - `main`: The main application blueprint.
+  - `account`: Blueprint for managing user accounts.
+  - `oauth`: Blueprint for OAuth 2.0 integration.
+  - `payment`: Blueprint for handling payment processing.
+  - `webhook`: Blueprint for handling webhooks.
+  - `admin`: Blueprint for the admin dashboard.
+  - `static`: This directory is used for storing static assets like CSS, JavaScript, and images.
+  - `templates`: Contains HTML templates used by the application.
+- `config.py`: The configuration file where you define application settings, such as database configurations and OAuth 2.0 credentials.
+- `run.py`: A script to start the Flask development server.
+- `app.py`: The main application entry point.
+- `requirements.txt`: Lists all project dependencies. You can install these dependencies using `pip install -r requirements.txt`.
+- `zappa_settings.json`: Configuration file for deploying the application with Zappa, if applicable.
 
-```bash
-$ curl -H "Authorization: Bearer ${access_token}" http://127.0.0.1:5000/api/me
-```
 
-### Authorization code flow example
+## Configuration
 
-To test the authorization code flow, you can just open this URL in your browser.
-```bash
-$ open http://127.0.0.1:5000/oauth/authorize?response_type=code&client_id=${client_id}&scope=profile
-```
+The application's configuration settings can be found in the `config.py` file. You must configure the following settings:
 
-After granting the authorization, you should be redirected to `${redirect_uri}/?code=${code}`
+- OAuth 2.0 credentials (client ID and client secret).
+- Database configuration (e.g., database URL).
+- Other application-specific settings.
 
-Then your app can send the code to the authorization server to get an access token:
+## Usage
 
-```bash
-$ curl -u ${client_id}:${client_secret} -XPOST http://127.0.0.1:5000/oauth/token -F grant_type=authorization_code -F scope=profile -F code=${code}
-```
+The application provides several features accessible via different endpoints. Refer to the [Usage](#usage) section in the project's documentation for detailed information on using these features.
 
-Now you can access `/api/me`:
+## OAuth 2.0 Integration
 
-```bash
-$ curl -H "Authorization: Bearer ${access_token}" http://127.0.0.1:5000/api/me
-```
+OAuth 2.0 authentication is integrated into the platform. You need to configure OAuth 2.0 credentials from your chosen OAuth provider and set them in the `config.py` file.
 
-For now, you can read the source in example or follow the long boring tutorial below.
+## Admin Dashboard
 
-**IMPORTANT**: To test implicit grant, you need to `token_endpoint_auth_method` to `none`.
-
-## Preparation
-
-Assume this example doesn't exist at all. Let's write an OAuth 2.0 server
-from scratch step by step.
-
-### Create folder structure
-
-Here is our Flask website structure:
-
-```
-app.py         --- FLASK_APP
-website/
-  app.py       --- Flask App Factory
-  __init__.py  --- module initialization (empty)
-  models.py    --- SQLAlchemy Models
-  oauth2.py    --- OAuth 2.0 Provider Configuration
-  routes.py    --- Routes views
-  templates/
-```
-
-### Installation
-
-Create a virtualenv and install all the requirements. You can also put the
-dependencies into `requirements.txt`:
-
-```
-Flask
-Flask-SQLAlchemy
-Authlib
-```
-
-### Hello World!
-
-Create a home route view to say "Hello World!". It is used to test if things
-working well.
-
-
-```python
-# website/routes.py
-from flask import Blueprint
-bp = Blueprint(__name__, 'home')
-
-@bp.route('/')
-def home():
-    return 'Hello World!'
-```
-
-```python
-# website/app.py
-from flask import Flask
-from .routes import bp
-
-def create_app(config=None):
-    app = Flask(__name__)
-    # load app sepcified configuration
-    if config is not None:
-        if isinstance(config, dict):
-            app.config.update(config)
-        elif config.endswith('.py'):
-            app.config.from_pyfile(config)
-    setup_app(app)
-    return app
-
-def setup_app(app):
-    app.register_blueprint(bp, url_prefix='')
-```
-
-```python
-# app.py
-from website.app import create_app
-
-app = create_app({
-    'SECRET_KEY': 'secret',
-})
-```
-
-Create an empty ```__init__.py``` file in the ```website``` folder.
-
-The "Hello World!" example should run properly:
-
-    $ FLASK_APP=app.py flask run
-
-## Define Models
-
-We will use SQLAlchemy and SQLite for our models. You can also use other
-databases and other ORM engines. Authlib has some built-in SQLAlchemy mixins
-which will make it easier for creating models.
-
-Let's create the models in `website/models.py`. We need four models, which are
-
-- User: you need a user to test and create your application
-- OAuth2Client: the oauth client model
-- OAuth2AuthorizationCode: for `grant_type=code` flow
-- OAuth2Token: save the `access_token` in this model.
-
-Check how to define these models in `website/models.py`.
-
-Once you've created your own `website/models.py` (or copied our version), you'll need to import the database object `db`. Add the line `from .models import db` just after `from flask import Flask` in your scratch-built version of `website/app.py`.
-
-To initialize the database upon startup, if no tables exist, you'll add a few lines to the `setup_app()` function in `website/app.py` so that it now looks like:
-
-```python
-def setup_app(app):
-    # Create tables if they do not exist already
-    @app.before_first_request
-    def create_tables():
-        db.create_all()
-
-    db.init_app(app)
-    app.register_blueprint(bp, url_prefix='')
-```
-
-You can try running the app again as above to make sure it works.
-
-## Implement Grants
-
-The source code is in `website/oauth2.py`. There are four standard grant types:
-
-- Authorization Code Grant
-- Implicit Grant
-- Client Credentials Grant
-- Resource Owner Password Credentials Grant
-
-And Refresh Token is implemented as a Grant in Authlib. You don't have to do
-anything on Implicit and Client Credentials grants, but there are missing
-methods to be implemented in other grants. Check out the source code in
-`website/oauth2.py`.
-
-Once you've created your own `website/oauth2.py`, import the oauth2 config object from the oauth2 module. Add the line `from .oauth2 import config_oauth` just after the import you added above in your scratch-built version of `website/app.py`.
-
-To initialize the oauth object, add `config_oauth(app)` to the `setup_app()` function, just before the line that starts with `app.register_blueprint` so it looks like:
-
-```python
-def setup_app(app):
-    # Create tables if they do not exist already
-    @app.before_first_request
-    def create_tables():
-        db.create_all()
-
-    db.init_app(app)
-    config_oauth(app)
-    app.register_blueprint(bp, url_prefix='')
-```
-You can try running the app again as above to make sure it still works.
-
-## `@require_oauth`
-
-Authlib has provided a `ResourceProtector` for you to create the decorator
-`@require_oauth`, which can be easily implemented:
-
-```py
-from authlib.flask.oauth2 import ResourceProtector
-
-require_oauth = ResourceProtector()
-```
-
-For now, only Bearer Token is supported. Let's add bearer token validator to
-this ResourceProtector:
-
-```py
-from authlib.flask.oauth2.sqla import create_bearer_token_validator
-
-# helper function: create_bearer_token_validator
-bearer_cls = create_bearer_token_validator(db.session, OAuth2Token)
-require_oauth.register_token_validator(bearer_cls())
-```
-
-Check the full implementation in `website/oauth2.py`.
-
-
-## OAuth Routes
-
-For OAuth server itself, we only need to implement routes for authentication,
-and issuing tokens. Since we have added token revocation feature, we need a
-route for revoking too.
-
-Checkout these routes in `website/routes.py`. Their path begin with `/oauth/`.
-
-
-## Other Routes
-
-But that is not enough. In this demo, you will need to have some web pages to
-create and manage your OAuth clients. Check that `/create_client` route.
-
-And we have an API route for testing. Check the code of `/api/me`.
-
-
-## Finish
-
-Here you go. You've got an OAuth 2.0 server.
-
-Read more information on <https://docs.authlib.org/>.
+The project includes an admin dashboard accessible at the `/sfadmin` URL. This dashboard allows you to manage users, payments, and other administrative tasks.
 
 ## License
 
-Same license with [Authlib](https://authlib.org/plans).
+This project is licensed under the GNU General Public License, version 2 - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [Flask](https://flask.palletsprojects.com/)
+- [Stripe](https://stripe.com/docs/api)
